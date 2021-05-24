@@ -9,6 +9,9 @@ android {
     defaultConfig {
         consumerProguardFiles "consumer-rules.pro"
     }
+    kotlinOptions {
+        freeCompilerArgs += '-Xexplicit-api=strict'
+    }
 }
 
 dependencies {
