@@ -1,2 +1,6 @@
 jdk:
   - openjdk11
+
+install:
+  - ./gradlew :lyricist:build :lyricist:publishToMavenLocal
+  - find . -name "*.aar"
