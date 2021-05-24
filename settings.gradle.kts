@@ -6,8 +6,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "lyricist"
-
 include(":sample", ":lyricist")
 
 enableFeaturePreview("VERSION_CATALOGS")
