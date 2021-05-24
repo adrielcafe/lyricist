@@ -1,0 +1,20 @@
+[versions]
+plugin-android = "7.1.0-alpha01"
+plugin-ktlint = "10.0.0"
+kotlin = "1.4.32"
+appCompat = "1.3.0"
+compose = "1.0.0-beta07"
+composeActivity = "1.3.0-alpha08"
+
+[libraries]
+plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }
+plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "plugin-ktlint" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+compose-activity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
+
+[bundles]
+plugins = ["plugin-android", "plugin-ktlint", "plugin-kotlin"]

@@ -1,0 +1,16 @@
+apply plugin: "com.android.application"
+apply from: "../android-module.gradle"
+
+android {
+    defaultConfig {
+        applicationId "cafe.adriel.lyricist.sample"
+    }
+}
+
+dependencies {
+    implementation projects.lyricist
+
+    implementation libs.appCompat
+    implementation libs.compose.activity
+    implementation libs.compose.material
+}
