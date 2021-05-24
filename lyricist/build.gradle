@@ -1,9 +1,6 @@
 apply plugin: "com.android.library"
-apply plugin: "maven-publish"
 apply from: "../android-module.gradle"
-
-group = "com.github.adrielcafe"
-version = "1.0.0"
+apply plugin: "maven-publish"
 
 android {
     defaultConfig {
@@ -29,9 +26,6 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = "com.github.adrielcafe"
-                artifactId = "lyricist"
-                version = "1.0.0"
             }
         }
     }
