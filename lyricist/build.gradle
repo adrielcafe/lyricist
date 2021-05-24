@@ -2,6 +2,9 @@ apply plugin: "com.android.library"
 apply plugin: "maven-publish"
 apply from: "../android-module.gradle"
 
+group = "com.github.adrielcafe"
+version = "1.0.0"
+
 android {
     defaultConfig {
         consumerProguardFiles "consumer-rules.pro"
@@ -20,6 +23,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
+                groupId = project.group
+                artifactId = project.name
+                version = project.version
             }
         }
     }
