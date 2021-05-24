@@ -9,6 +9,12 @@ android {
     defaultConfig {
         consumerProguardFiles "consumer-rules.pro"
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
     kotlinOptions {
         freeCompilerArgs += '-Xexplicit-api=strict'
     }
@@ -23,9 +29,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = project.group
-                artifactId = project.name
-                version = project.version
+                groupId = "com.github.adrielcafe"
+                artifactId = "lyricist"
+                version = "1.0.0"
             }
         }
     }
