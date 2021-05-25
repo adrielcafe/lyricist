@@ -16,9 +16,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import cafe.adriel.lyricist.Lyricist
-import cafe.adriel.lyricist.LyricistLocale
 import cafe.adriel.lyricist.ProvideStrings
 import cafe.adriel.lyricist.rememberLyricist
 import cafe.adriel.lyricist.sample.strings.LocalStrings
@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val lyricist = rememberLyricist(strings)
 
@@ -47,13 +48,13 @@ class MainActivity : ComponentActivity() {
                     ) {
                         SwitchLocaleButton(
                             lyricist,
-                            LyricistLocale.EN,
+                            Locales.EN,
                             Modifier.weight(1f)
                         )
                         Spacer(Modifier.weight(.1f))
                         SwitchLocaleButton(
                             lyricist,
-                            LyricistLocale.PT,
+                            Locales.PT,
                             Modifier.weight(1f)
                         )
                     }
@@ -74,7 +75,7 @@ class MainActivity : ComponentActivity() {
             Text(text = LocalStrings.current.annotatedString)
 
             // Parameter string
-            Text(text = LocalStrings.current.parameterString(lyricist.currentLocale.language))
+            Text(text = LocalStrings.current.parameterString(lyricist.currentLocale.toLanguageTag()))
 
             // Plural string
             Text(text = LocalStrings.current.pluralString(2))
@@ -88,14 +89,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun SwitchLocaleButton(
         lyricist: Lyricist<Strings>,
-        locale: LyricistLocale,
+        locale: Locale,
         modifier: Modifier = Modifier
     ) {
         Button(
             onClick = { lyricist.currentLocale = locale },
             modifier = modifier
         ) {
-            Text(text = locale.language)
+            Text(text = locale.toLanguageTag())
         }
     }
 }

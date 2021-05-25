@@ -7,32 +7,42 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.intl.Locale
 
 public class Lyricist<T>(
-    private val defaultLocale: LyricistLocale,
-    private val translations: Map<LyricistLocale, T>
+    private val defaultLocale: Locale,
+    private val translations: Map<Locale, T>
 ) {
 
-    public var currentLocale: LyricistLocale by mutableStateOf(defaultLocale)
+    public var currentLocale: Locale by mutableStateOf(defaultLocale)
 
     public val strings: T
         get() = translations[currentLocale]
-            ?: translations[currentLocale.fallbackOrNull]
+            ?: translations[currentLocale.fallback]
             ?: translations[defaultLocale]
-            ?: error("Strings for locale ${currentLocale.tag} not found")
+            ?: error("Strings for locale ${currentLocale.toLanguageTag()} not found")
+
+    private val Locale.fallback: Locale
+        get() = toLanguageTag()
+            .split(LANGUAGE_TAG_SEPARATOR)[0]
+            .let(::Locale)
+
+    public companion object {
+        private const val LANGUAGE_TAG_SEPARATOR = '-'
+    }
 }
 
 @Composable
 public fun <T> rememberLyricist(
-    vararg translations: Pair<LyricistLocale, T>,
-    locale: LyricistLocale = LyricistLocale.current
+    vararg translations: Pair<Locale, T>,
+    locale: Locale = Locale.current
 ): Lyricist<T> =
     rememberLyricist(translations.toMap(), locale)
 
 @Composable
 public fun <T> rememberLyricist(
-    translations: Map<LyricistLocale, T>,
-    locale: LyricistLocale = LyricistLocale.current
+    translations: Map<Locale, T>,
+    locale: Locale = Locale.current
 ): Lyricist<T> =
     remember { Lyricist(locale, translations) }
 
