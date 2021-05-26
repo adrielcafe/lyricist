@@ -24,7 +24,8 @@ public class Lyricist<T>(
 
     private val Locale.fallback: Locale
         get() = toLanguageTag()
-            .split(LANGUAGE_TAG_SEPARATOR)[0]
+            .split(LANGUAGE_TAG_SEPARATOR)
+            .first()
             .let(::Locale)
 
     public companion object {

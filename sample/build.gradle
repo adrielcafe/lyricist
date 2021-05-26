@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    implementation projects.lyricist
+    implementation(project(":lyricist"))
 
     implementation libs.appCompat
     implementation libs.compose.activity

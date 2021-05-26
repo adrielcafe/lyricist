@@ -10,7 +10,7 @@
 * Generate the `Strings` class through existing `strings.xml` files
 
 #### Why _Lyricist_?
-Inspired by [accompanist](https://github.com/google/accompanist#why-the-name): music composing is done by a composer, and since this library is about writing ~~lyrics~~ strings, the role of an [lyricist](https://en.wikipedia.org/wiki/Lyricist) felt like a good name.
+Inspired by [accompanist](https://github.com/google/accompanist#why-the-name): music composing is done by a composer, and since this library is about writing ~~lyrics~~ strings, the role of a [lyricist](https://en.wikipedia.org/wiki/Lyricist) felt like a good name.
 
 ## Usage
 Take a look at the [sample app](https://github.com/adrielcafe/lyricist/tree/main/sample/src/main/java/cafe/adriel/lyricist/sample) for a working example.
