@@ -8,6 +8,6 @@ internal class LyricistVisitor(
 ) : KSVisitorVoid() {
 
     override fun visitPropertyDeclaration(property: KSPropertyDeclaration, data: Unit) {
-        declarations.add(property)
+        declarations += property
     }
 }

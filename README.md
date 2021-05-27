@@ -79,21 +79,22 @@ Now you can use `LocalStrings` to retrieve the current strings.
 ```kotlin
 val strings = LocalStrings.current
 
-// Simple simple
 Text(text = strings.simpleString)
+// > Hello Compose!
 
-// Annotated string
 Text(text = strings.annotatedString)
+// > Hello Compose!
 
-// Parameter string
 Text(text = strings.parameterString(lyricist.languageTag))
+// > Current locale: en
 
-// Plural string
 Text(text = strings.pluralString(2))
 Text(text = strings.pluralString(1))
+// > You have 2 wishes remaining
+// > You have 1 wish remaining
 
-// List string
 Text(text = strings.listStrings.joinToString())
+// > Avocado, Pineapple, Plum, Coconut
 ```
 
 Use the Lyricist instance provided by `rememberStrings()` to change the current locale. This will trigger a [recomposition](https://developer.android.com/jetpack/compose/mental-model#recomposition) that will update the strings wherever they are being used.

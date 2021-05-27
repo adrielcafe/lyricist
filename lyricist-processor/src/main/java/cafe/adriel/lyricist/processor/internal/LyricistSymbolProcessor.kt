@@ -101,7 +101,7 @@ internal class LyricistSymbolProcessor(
         val defaultCount = declarations
             .count { it.annotations.getValue<Strings, Boolean>(Strings::default.name) == true }
 
-        val typesCount = declarations
+        val differentTypeCount = declarations
             .groupBy { it.getClassQualifiedName() }
             .count()
 
@@ -114,7 +114,7 @@ internal class LyricistSymbolProcessor(
                 logger.exception(IllegalArgumentException("More than one @Strings(default = true) found"))
                 false
             }
-            typesCount != 1 -> {
+            differentTypeCount != 1 -> {
                 logger.exception(IllegalArgumentException("All @Strings must have the same type"))
                 false
             }
