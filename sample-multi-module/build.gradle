@@ -1,11 +1,9 @@
-apply plugin: "com.android.application"
+apply plugin: "com.android.library"
 apply plugin: "com.google.devtools.ksp"
 apply from: "../android-module.gradle"
 
-android {
-    defaultConfig {
-        applicationId "cafe.adriel.lyricist.sample"
-    }
+ksp {
+    arg("lyricist.moduleName", project.name)
 }
 
 dependencies {
@@ -14,6 +12,5 @@ dependencies {
     ksp(project(":lyricist-processor"))
 
     implementation libs.appCompat
-    implementation libs.compose.activity
-    implementation libs.compose.material
+    implementation libs.compose.ui
 }

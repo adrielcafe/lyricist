@@ -16,14 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.lyricist.Lyricist
 import cafe.adriel.lyricist.ProvideStrings
-import cafe.adriel.lyricist.rememberLyricist
-import cafe.adriel.lyricist.sample.strings.LocalStrings
+import cafe.adriel.lyricist.rememberStrings
 import cafe.adriel.lyricist.sample.strings.Strings
-import cafe.adriel.lyricist.sample.strings.strings
 
 class MainActivity : ComponentActivity() {
 
@@ -31,9 +29,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val lyricist = rememberLyricist(strings)
+            val lyricist = rememberStrings()
 
-            ProvideStrings(lyricist, LocalStrings) {
+            ProvideStrings(lyricist) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -75,7 +73,7 @@ class MainActivity : ComponentActivity() {
             Text(text = LocalStrings.current.annotatedString)
 
             // Parameter string
-            Text(text = LocalStrings.current.parameterString(lyricist.currentLocale.toLanguageTag()))
+            Text(text = LocalStrings.current.parameterString(lyricist.languageTag))
 
             // Plural string
             Text(text = LocalStrings.current.pluralString(2))
@@ -89,14 +87,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun SwitchLocaleButton(
         lyricist: Lyricist<Strings>,
-        locale: Locale,
+        languageTag: String,
         modifier: Modifier = Modifier
     ) {
         Button(
-            onClick = { lyricist.currentLocale = locale },
+            onClick = { lyricist.languageTag = languageTag },
             modifier = modifier
         ) {
-            Text(text = locale.toLanguageTag())
+            Text(text = languageTag)
         }
     }
 }

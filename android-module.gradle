@@ -9,6 +9,18 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    buildTypes {
+        debug {
+            sourceSets {
+                main.java.srcDirs += 'build/generated/ksp/debug/kotlin/'
+            }
+        }
+        release {
+            sourceSets {
+                main.java.srcDirs += 'build/generated/ksp/release/kotlin/'
+            }
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

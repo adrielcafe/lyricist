@@ -2,6 +2,10 @@
 plugin-android = "7.1.0-alpha01"
 plugin-ktlint = "10.0.0"
 kotlin = "1.4.32"
+
+ksp = "1.4.32-1.0.0-alpha08"
+caseFormat = "0.2.0"
+
 appCompat = "1.3.0"
 compose = "1.0.0-beta07"
 composeActivity = "1.3.0-alpha08"
@@ -10,6 +14,10 @@ composeActivity = "1.3.0-alpha08"
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }
 plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "plugin-ktlint" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
+ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+caseFormat = { module = "com.fleshgrinder.kotlin:case-format", version.ref = "caseFormat" }
 
 appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
@@ -17,4 +25,4 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 
 [bundles]
-plugins = ["plugin-android", "plugin-ktlint", "plugin-kotlin"]
+plugins = ["plugin-android", "plugin-ktlint", "plugin-kotlin", "plugin-ksp"]

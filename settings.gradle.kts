@@ -6,7 +6,12 @@ dependencyResolutionManagement {
     }
 }
 
-include(":sample", ":lyricist")
+include(
+    ":sample",
+    ":sample-multi-module",
+    ":lyricist",
+    ":lyricist-processor",
+)
 
 enableFeaturePreview("VERSION_CATALOGS")
 
