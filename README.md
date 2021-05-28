@@ -23,7 +23,7 @@ Inspired by [accompanist](https://github.com/google/accompanist#why-the-name) li
 ## Usage
 Take a look at the [sample app](https://github.com/adrielcafe/lyricist/tree/main/sample/src/main/java/cafe/adriel/lyricist/sample) and [sample-multi-module](https://github.com/adrielcafe/lyricist/tree/main/sample-multi-module/src/main/java/cafe/adriel/lyricist/sample/multimodule) for working examples.
 
-First, create a `data class`, `class` or `interface` and declare your strings. The strings can be anything: `Char`, `String`, `AnnotatedString`, `List<String>`, `Set<String>` or even lambdas!
+Start by declaring your strings on a `data class`, `class` or `interface` (pick one). The strings can be anything (really, it's up to you): `Char`, `String`, `AnnotatedString`, `List<String>`, `Set<String>` or even lambdas!
 ```kotlin
 data class Strings(
     val simpleString: String,
@@ -34,7 +34,7 @@ data class Strings(
 )
 ```
 
-Next, create instances for each supported language and annotate with `@Strings`. The `languageTag` must be an [IETF BCP47](https://en.wikipedia.org/wiki/IETF_language_tag) compliant language tag ([docs](https://developer.android.com/guide/topics/resources/providing-resources#LocaleQualifier)).
+Next, create instances for each supported language and annotate with `@Strings`. The `languageTag` must be an [IETF BCP47](https://en.wikipedia.org/wiki/IETF_language_tag) compliant language tag ([docs](https://developer.android.com/guide/topics/resources/providing-resources#LocaleQualifier)). You must flag one of them as default.
 ```kotlin
 @Strings(languageTag = Locales.EN, default = true)
 val EnStrings = Strings(
@@ -78,6 +78,35 @@ ProvideStrings(lyricist) {
     // Content
 }
 ```
+
+<details><summary>Writing the code for yourself</summary>
+
+Don't want to enable KSP to generate the code for you? No problem! Follow the steps below to integrate with Lyricist manually.
+
+First, map each supported language tag to their corresponding instances.
+```kotlin
+val strings = mapOf(
+    Locales.EN to EnStrings,
+    Locales.PT to PtStrings,
+    Locales.ES to EsStrings,
+    Locales.RU to RuStrings
+)
+```
+
+Next, create your `LocalStrings` and choose one translation as default.
+```kotlin
+val LocalStrings = staticCompositionLocalOf { EnStrings }
+```
+
+Finally, use the same functions, `rememberStrings()` and `ProvideStrings()`, to make your `LocalStrings` accessible down the tree. But this time you need to provide your `strings` and `LocalStrings` manually.
+```kotlin
+val lyricist = rememberStrings(strings)
+
+ProvideStrings(lyricist, LocalStrings) {
+    // Content
+}
+```
+</details>
 
 Now you can use `LocalStrings` to retrieve the current strings.
 ```kotlin
