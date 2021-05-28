@@ -11,3 +11,5 @@ dependencies {
     implementation libs.ksp
     implementation libs.caseFormat
 }
+
+apply plugin: "com.vanniktech.maven.publish"

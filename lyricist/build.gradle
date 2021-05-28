@@ -1,16 +1,9 @@
 apply plugin: "com.android.library"
 apply from: "../android-module.gradle"
-apply plugin: "maven-publish"
 
 android {
     defaultConfig {
         consumerProguardFiles "consumer-rules.pro"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
     kotlinOptions {
         freeCompilerArgs += '-Xexplicit-api=strict'
@@ -21,12 +14,4 @@ dependencies {
     implementation libs.compose.ui
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-            }
-        }
-    }
-}
+apply plugin: "com.vanniktech.maven.publish"

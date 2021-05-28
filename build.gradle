@@ -11,11 +11,14 @@ buildscript {
 
 subprojects {
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
+    plugins.withId("com.vanniktech.maven.publish") {
+        mavenPublish {
+            sonatypeHost = "S01"
+        }
+    }
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
-        maven { url 'https://jitpack.io' }
     }
 }
 

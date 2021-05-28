@@ -1,6 +1,8 @@
 [versions]
 plugin-android = "7.1.0-alpha01"
 plugin-ktlint = "10.0.0"
+plugin-maven = "0.15.1"
+
 kotlin = "1.4.32"
 
 ksp = "1.4.32-1.0.0-alpha08"
@@ -13,6 +15,7 @@ composeActivity = "1.3.0-alpha08"
 [libraries]
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }
 plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "plugin-ktlint" }
+plugin-maven = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "plugin-maven" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
@@ -25,4 +28,4 @@ compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 
 [bundles]
-plugins = ["plugin-android", "plugin-ktlint", "plugin-kotlin", "plugin-ksp"]
+plugins = ["plugin-android", "plugin-ktlint",  "plugin-maven", "plugin-kotlin", "plugin-ksp"]
