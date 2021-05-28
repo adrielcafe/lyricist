@@ -1,17 +1,21 @@
+[![Maven Central](https://img.shields.io/maven-central/v/cafe.adriel.lyricist/lyricist?style=for-the-badge&color=blue)](https://repo.maven.apache.org/maven2/cafe/adriel/lyricist/)
 [![Android API](https://img.shields.io/badge/api-21%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=21)
-[![kotlin](https://img.shields.io/github/languages/top/adrielcafe/lyricist.svg?style=for-the-badge)](https://kotlinlang.org/)
+[![kotlin](https://img.shields.io/github/languages/top/adrielcafe/lyricist.svg?style=for-the-badge&color=blueviolet)](https://kotlinlang.org/)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=for-the-badge)](https://ktlint.github.io/)
-[![License MIT](https://img.shields.io/github/license/adrielcafe/lyricist.svg?style=for-the-badge&color=yellow)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/adrielcafe/lyricist.svg?style=for-the-badge&color=orange)](https://opensource.org/licenses/MIT)
 
-# (WIP) Lyricist 🌎🌍🌏 
+# Lyricist 🌎🌍🌏 
 > The missing [I18N and I10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
 
 Jetpack Compose revolutionized the way we build UIs on Android, but not how we **interact with strings**. `stringResource()` works well, but don't benefit from the idiomatic Kotlin like Compose does.
 
 Lyricist tries to make working with strings as powerful as building UIs with Compose, *i.e.*, working with parameterized string is now typesafe, use of `when` expression to work with plurals with more flexibility, and even load/update the strings dynamically via an API!
 
-#### Next steps
-* Generate the `Strings` class through existing `strings.xml` files
+#### Roadmap
+- [x] [Simple API](#user-content-usage) to handle locale changes and provide the current strings
+- [x] Code generation with [Kotlin Symbol Processing](https://github.com/google/ksp) (KSP)
+- [x] [Multi module support](#user-content-multi-module-projects)
+- [ ] Code generation via existing `strings.xml` files
 
 #### Why _Lyricist_?
 Inspired by [accompanist](https://github.com/google/accompanist#why-the-name) library: music composing is done by a composer, and since this library is about writing ~~lyrics~~ strings, the role of a [lyricist](https://en.wikipedia.org/wiki/Lyricist) felt like a good name.
@@ -106,7 +110,7 @@ lyricist.languageTag = Locales.PT
 
 ### Multi module projects
 
-If you are using Lyricist on a multi module project and the generated artifacts (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the `lyricist.moduleName` argument to KSP into the module `build.gradle`.
+If you are using Lyricist on a multi module project and the generated artifacts (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the `lyricist.moduleName` argument to KSP in the module `build.gradle`.
 ```gradle
 ksp {
     arg("lyricist.moduleName", project.name)
@@ -116,8 +120,28 @@ ksp {
 Let's say you have a "dashboard" module, the generated artifacts will be `LocalDashboardStrings`, `rememberDashboardStrings()` and `ProvideDashboardStrings()`.
 
 ## Import to your project
-TODO
 
-## Developed by
-* [Adriel Café](http://github.com/adrielcafe) | [@adrielcafe](https://twitter.com/adrielcafe)
-* [Gabriel Souza](https://github.com/DevSrSouza/) | [@devsrsouza](https://twitter.com/devsrsouza)
+Add the following dependency to your module's `build.gradle`:
+```gradle
+implementation "cafe.adriel.lyricist:lyricist:${latest-version}"
+```
+
+(Optional) Enabling [KSP](https://github.com/google/ksp/blob/main/docs/quickstart.md):
+1. Import the plugin in the root `build.gradle` then apply to your modules
+```gradle
+buildscript {
+    dependencies {
+        classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${ksp-latest-version}"
+    }
+}
+
+apply plugin: "com.google.devtools.ksp"
+```
+
+2. Add the following dependencies
+```gradle
+implementation "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+ksp "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+```
+
+Current version: ![Maven Central](https://img.shields.io/maven-central/v/cafe.adriel.lyricist/lyricist?color=blue)
