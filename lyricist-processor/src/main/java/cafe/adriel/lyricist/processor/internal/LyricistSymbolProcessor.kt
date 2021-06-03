@@ -12,10 +12,9 @@ import com.google.devtools.ksp.symbol.KSAnnotation
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSValueArgument
 import com.google.devtools.ksp.validate
-import java.io.OutputStream
 
 internal class LyricistSymbolProcessor(
-    private val moduleName: String,
+    private val config: LyricistConfig,
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger
 ) : SymbolProcessor {
@@ -35,7 +34,7 @@ internal class LyricistSymbolProcessor(
     override fun finish() {
         if (validate().not()) return
 
-        val fileName = "${moduleName.toUpperCamelCase()}Strings"
+        val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
 
         val defaultStrings = declarations
             .first { it.annotations.getValue<Strings, Boolean>(Strings::default.name) == true }
@@ -64,7 +63,8 @@ internal class LyricistSymbolProcessor(
             packageName = PACKAGE_NAME,
             fileName = fileName
         ).use { stream ->
-            stream + """
+            stream.write(
+                """
                 |package $PACKAGE_NAME
                 |
                 |import androidx.compose.runtime.Composable
@@ -91,7 +91,8 @@ internal class LyricistSymbolProcessor(
                 |) {
                 |    ProvideStrings(lyricist, Local$fileName, content)
                 |}
-                """.trimMargin()
+                """.trimMargin().toByteArray()
+            )
         }
     }
 
@@ -126,20 +127,16 @@ internal class LyricistSymbolProcessor(
     private fun KSPropertyDeclaration.getClassQualifiedName(): String? =
         getter?.returnType?.resolve()?.declaration?.qualifiedName?.asString()
 
-    private inline fun <reified A : Annotation, reified T> List<KSAnnotation>.getValue(argumentName: String): T? =
+    private inline fun <reified A : Annotation, reified T> Sequence<KSAnnotation>.getValue(argumentName: String): T? =
         withName(A::class.simpleName!!)
             ?.arguments?.withName(argumentName)
             ?.value as? T
 
-    private fun List<KSAnnotation>.withName(name: String): KSAnnotation? =
+    private fun Sequence<KSAnnotation>.withName(name: String): KSAnnotation? =
         firstOrNull { it.shortName.getShortName() == name }
 
     private fun List<KSValueArgument>.withName(name: String): KSValueArgument? =
         firstOrNull { it.name?.getShortName() == name }
-
-    private operator fun OutputStream.plus(line: String) {
-        write("$line\n".toByteArray())
-    }
 
     private companion object {
         const val PACKAGE_NAME = "cafe.adriel.lyricist"
