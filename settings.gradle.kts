@@ -8,9 +8,11 @@ dependencyResolutionManagement {
 
 include(
     ":sample",
+    ":sample-xml",
     ":sample-multi-module",
     ":lyricist",
     ":lyricist-processor",
+    ":lyricist-processor-xml"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")

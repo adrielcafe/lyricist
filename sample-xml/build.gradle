@@ -1,0 +1,17 @@
+apply plugin: "com.android.library"
+apply plugin: "com.google.devtools.ksp"
+apply from: "../android-module.gradle"
+
+ksp {
+    arg("lyricist.xml.moduleName", "xml")
+    arg("lyricist.xml.defaultLanguageTag", "en")
+    arg("lyricist.xml.resourcesPath", android.sourceSets.main.res.srcDirs.first().absolutePath)
+}
+
+dependencies {
+    implementation(project(":lyricist"))
+    implementation(project(":lyricist-processor-xml"))
+    ksp(project(":lyricist-processor-xml"))
+
+    implementation libs.compose.ui
+}

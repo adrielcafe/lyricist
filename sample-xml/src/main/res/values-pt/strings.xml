@@ -1,0 +1,19 @@
+<resources>
+    <string name="simple">Olá "mundo"</string>
+    <string name="params">Parâmetros: %1$s, %2$d, %s, %d</string>
+
+    <string-array name="array">
+        <item>Abacate</item>
+        <item>Abacaxi</item>
+        <item>Ameixa</item>
+    </string-array>
+
+    <plurals name="plurals">
+        <item quantity="zero">%d zero</item>
+        <item quantity="one">%d um</item>
+        <item quantity="two">%d dois</item>
+        <item quantity="few">%d alguns</item>
+        <item quantity="many">%d muitos</item>
+        <item quantity="other">%d outro</item>
+    </plurals>
+</resources>

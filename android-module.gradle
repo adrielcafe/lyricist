@@ -21,8 +21,10 @@ android {
             }
         }
     }
+    buildFeatures {
+        compose true
+    }
     composeOptions {
-        kotlinCompilerVersion libs.versions.kotlin.get()
         kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
     compileOptions {
@@ -32,8 +34,5 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         useIR = true
-    }
-    buildFeatures {
-        compose true
     }
 }

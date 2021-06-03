@@ -1,0 +1,19 @@
+<resources>
+    <string name="simple">Hello "world"</string>
+    <string name="params">Parameters: %1$s, %2$d, %s, %d</string>
+
+    <string-array name="array">
+        <item>Avocado</item>
+        <item>Pineapple</item>
+        <item>Plum</item>
+    </string-array>
+
+    <plurals name="plurals">
+        <item quantity="zero">%d zero</item>
+        <item quantity="one">%d one</item>
+        <item quantity="two">%d two</item>
+        <item quantity="few">%d few</item>
+        <item quantity="many">%d many</item>
+        <item quantity="other">%d other</item>
+    </plurals>
+</resources>

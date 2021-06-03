@@ -60,16 +60,20 @@ internal class LyricistSymbolProcessor(
                 aggregating = true,
                 sources = declarations.map { it.containingFile!! }.toTypedArray()
             ),
-            packageName = PACKAGE_NAME,
+            packageName = config.packageName,
             fileName = fileName
         ).use { stream ->
             stream.write(
                 """
-                |package $PACKAGE_NAME
+                |package ${config.packageName}
                 |
                 |import androidx.compose.runtime.Composable
                 |import androidx.compose.runtime.staticCompositionLocalOf
                 |import androidx.compose.ui.text.intl.Locale
+                |import cafe.adriel.lyricist.Lyricist
+                |import cafe.adriel.lyricist.LanguageTag
+                |import cafe.adriel.lyricist.rememberStrings
+                |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
                 |private val strings = mapOf(
@@ -139,7 +143,6 @@ internal class LyricistSymbolProcessor(
         firstOrNull { it.name?.getShortName() == name }
 
     private companion object {
-        const val PACKAGE_NAME = "cafe.adriel.lyricist"
-        const val INDENTATION = "    "
+        val INDENTATION = " ".repeat(4)
     }
 }

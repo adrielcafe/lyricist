@@ -1,0 +1,16 @@
+apply plugin: 'kotlin'
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += '-Xexplicit-api=strict'
+    }
+}
+
+dependencies {
+    implementation libs.ksp
+    implementation libs.caseFormat
+    implementation libs.konsumeXml
+}
+
+apply plugin: "com.vanniktech.maven.publish"

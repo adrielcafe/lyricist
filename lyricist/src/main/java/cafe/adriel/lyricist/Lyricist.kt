@@ -15,7 +15,7 @@ public class Lyricist<T>(
         get() = translations[languageTag]
             ?: translations[languageTag.fallback]
             ?: translations[defaultLanguageTag]
-            ?: error("Strings for locale $languageTag not found")
+            ?: error("Strings for language tag $languageTag not found")
 
     private val LanguageTag.fallback: LanguageTag
         get() = split(LANGUAGE_TAG_SEPARATOR).first()

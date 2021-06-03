@@ -9,6 +9,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":sample-multi-module"))
+    implementation(project(":sample-xml"))
+
     implementation(project(":lyricist"))
     implementation(project(":lyricist-processor"))
     ksp(project(":lyricist-processor"))

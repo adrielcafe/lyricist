@@ -3,7 +3,8 @@ apply plugin: "com.google.devtools.ksp"
 apply from: "../android-module.gradle"
 
 ksp {
-    arg("lyricist.moduleName", project.name)
+    arg("lyricist.packageName", "cafe.adriel.lyricist.custompackage")
+    arg("lyricist.moduleName", "multi-module")
 }
 
 dependencies {

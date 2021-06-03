@@ -13,9 +13,12 @@ Lyricist tries to make working with strings as powerful as building UIs with Com
 
 #### Roadmap
 - [x] [Simple API](#user-content-usage) to handle locale changes and provide the current strings
-- [x] Code generation with [Kotlin Symbol Processing](https://github.com/google/ksp) (KSP)
 - [x] [Multi module support](#user-content-multi-module-projects)
-- [ ] Code generation via existing `strings.xml` files
+- [x] Basic code generation with [KSP](https://github.com/google/ksp) to reduce boilerplate code
+- [x] Code generation via existing `strings.xml` files
+
+#### Limitations
+* The XML processor doesn't handle `few` and `many` [plural values](https://developer.android.com/guide/topics/resources/string-resource#Plurals) (PRs are welcome) 
 
 #### Why _Lyricist_?
 Inspired by [accompanist](https://github.com/google/accompanist#why-the-name) library: music composing is done by a composer, and since this library is about writing ~~lyrics~~ strings, the role of a [lyricist](https://en.wikipedia.org/wiki/Lyricist) felt like a good name.
@@ -41,8 +44,8 @@ val EnStrings = Strings(
     simpleString = "Hello Compose!",
 
     annotatedString = buildAnnotatedString {
-        withStyle(SpanStyle(color = Color.Red, fontFamily = FontFamily.Cursive)) { append("Hello ") }
-        withStyle(SpanStyle(fontWeight = FontWeight.Light, fontSize = 16.sp)) { append("Compose!") }
+        withStyle(SpanStyle(color = Color.Red)) { append("Hello ") }
+        withStyle(SpanStyle(fontWeight = FontWeight.Light)) { append("Compose!") }
     },
 
     parameterString = { locale ->
@@ -51,13 +54,15 @@ val EnStrings = Strings(
 
     pluralString = { count ->
         val value = when (count) {
-            1 -> "$count wish"
-            else -> "$count wishes"
+            1 -> "a single apple"
+            2 -> "two apples"
+            in 3..10 -> "a bunch of apples"
+            else -> "a lot of apples"
         }
-        "You have $value remaining"
+        "I have $value"
     },
 
-    listStrings = listOf("Avocado", "Pineapple", "Plum", "Coconut")
+    listStrings = listOf("Avocado", "Pineapple", "Plum")
 )
 
 @Strings(languageTag = Locales.PT)
@@ -139,14 +144,18 @@ lyricist.languageTag = Locales.PT
 
 ### Multi module projects
 
-If you are using Lyricist on a multi module project and the generated artifacts (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the `lyricist.moduleName` argument to KSP in the module `build.gradle`.
+If you are using Lyricist on a multi module project and the generated declarations (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the following arguments to KSP in the module `build.gradle`.
 ```gradle
 ksp {
+    arg("lyricist.packageName", "com.my.app")
     arg("lyricist.moduleName", project.name)
 }
 ```
 
-Let's say you have a "dashboard" module, the generated artifacts will be `LocalDashboardStrings`, `rememberDashboardStrings()` and `ProvideDashboardStrings()`.
+Let's say you have a "dashboard" module, the generated declarations will be `LocalDashboardStrings`, `rememberDashboardStrings()` and `ProvideDashboardStrings()`.
+
+## Processing XML Strings
+TODO
 
 ## Import to your project
 
