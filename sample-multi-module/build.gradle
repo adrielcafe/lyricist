@@ -9,7 +9,7 @@ ksp {
 
 dependencies {
     implementation(project(":lyricist"))
-    implementation(project(":lyricist-processor"))
+    compileOnly(project(":lyricist-processor"))
     ksp(project(":lyricist-processor"))
 
     implementation libs.appCompat

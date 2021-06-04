@@ -7,15 +7,17 @@
 # Lyricist 🌎🌍🌏 
 > The missing [I18N and I10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
 
-Jetpack Compose revolutionized the way we build UIs on Android, but not how we **interact with strings**. `stringResource()` works well, but don't benefit from the idiomatic Kotlin like Compose does.
+Jetpack Compose greatly improved the way we build UIs on Android, but not how we **interact with strings**. `stringResource()` works well, but doesn't benefit from the idiomatic Kotlin like Compose.
 
 Lyricist tries to make working with strings as powerful as building UIs with Compose, *i.e.*, working with parameterized string is now typesafe, use of `when` expression to work with plurals with more flexibility, and even load/update the strings dynamically via an API!
 
-#### Roadmap
+**Development status:** as Compose and KSP are in Beta, Lyricist will also be in Beta until they become stable.
+
+#### Features
 - [x] [Simple API](#user-content-usage) to handle locale changes and provide the current strings
-- [x] [Multi module support](#user-content-multi-module-projects)
-- [x] Basic code generation with [KSP](https://github.com/google/ksp) to reduce boilerplate code
-- [x] Code generation via existing `strings.xml` files
+- [x] [Multi module support](#user-content-multi-module-settings)
+- [x] Code generation with [KSP](https://github.com/google/ksp)
+- [x] [Easy migration](#user-content-migrating-from-strings-xml) from `strings.xml`
 
 #### Limitations
 * The XML processor doesn't handle `few` and `many` [plural values](https://developer.android.com/guide/topics/resources/string-resource#Plurals) (PRs are welcome) 
@@ -111,6 +113,8 @@ ProvideStrings(lyricist, LocalStrings) {
     // Content
 }
 ```
+
+---
 </details>
 
 Now you can use `LocalStrings` to retrieve the current strings.
@@ -126,13 +130,17 @@ Text(text = strings.annotatedString)
 Text(text = strings.parameterString(lyricist.languageTag))
 // > Current locale: en
 
-Text(text = strings.pluralString(2))
 Text(text = strings.pluralString(1))
-// > You have 2 wishes remaining
-// > You have 1 wish remaining
+Text(text = strings.pluralString(2))
+Text(text = strings.pluralString(5))
+Text(text = strings.pluralString(20))
+// > I have a single apple
+// > I have two apples
+// > I have a bunch of apples
+// > I have a lot of apples
 
 Text(text = strings.listStrings.joinToString())
-// > Avocado, Pineapple, Plum, Coconut
+// > Avocado, Pineapple, Plum
 ```
 
 Use the Lyricist instance provided by `rememberStrings()` to change the current locale. This will trigger a [recomposition](https://developer.android.com/jetpack/compose/mental-model#recomposition) that will update the strings wherever they are being used.
@@ -142,9 +150,9 @@ lyricist.languageTag = Locales.PT
 
 **Important:** Lyricist uses the System locale as default. It won't persist the current locale on storage, is outside its scope.
 
-### Multi module projects
+## Multi module settings
 
-If you are using Lyricist on a multi module project and the generated declarations (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the following arguments to KSP in the module `build.gradle`.
+If you are using Lyricist on a multi module project and the generated declarations (`LocalStrings`, `rememberStrings()`, `ProvideStrings()`) are too generic for you, provide the following (optional) arguments to KSP in the module's `build.gradle`.
 ```gradle
 ksp {
     arg("lyricist.packageName", "com.my.app")
@@ -154,18 +162,59 @@ ksp {
 
 Let's say you have a "dashboard" module, the generated declarations will be `LocalDashboardStrings`, `rememberDashboardStrings()` and `ProvideDashboardStrings()`.
 
-## Processing XML Strings
-TODO
+## Migrating from `strings.xml`
+So you liked Lyricist, but already have a project with thousands of strings spread over multiples files? I have good news for you: Lyricist can extract these existing strings and generate all the code you just saw above.
+
+Similar to the multi module setup, you must provide a few arguments to KSP. Lyricist will search for `strings.xml` files in the resources path. You can also provide a language tag to be used as default value for the `LocalStrings`. 
+```gradle
+ksp {
+    // Required
+    arg("lyricist.xml.resourcesPath", android.sourceSets.main.res.srcDirs.first().absolutePath)
+    
+    // Optional
+    arg("lyricist.packageName", "com.my.app")
+    arg("lyricist.xml.moduleName", "xml")
+    arg("lyricist.xml.defaultLanguageTag", "en")
+}
+```
+
+After the first build, the well-known `rememberStrings()` and `ProvideStrings()` (naming can vary depending on your KSP settings) will be available for use. Lyricist will also generated a `Locales` object containing all language tags currently in use in your project. 
+```kotlin
+val lyricist = rememberStrings(strings)
+
+ProvideStrings(lyricist, LocalStrings) {
+    // Content
+}
+
+lyricist.languageTag = Locales.PT
+```
+
+You can easily migrate from `strings.xml` to Lyricist just by copying the generated files to your project. That way, you can finally say goodbye to `strings.xml`. 
+
+## Troubleshooting
+
+<details><summary>Can't use the generated code on my IDE</summary>
+
+You should set manually the source sets of the generated files, like described [here](https://github.com/google/ksp/issues/37).
+```gradle
+buildTypes {
+    debug {
+        sourceSets {
+            main.java.srcDirs += 'build/generated/ksp/debug/kotlin/'
+        }
+    }
+    release {
+        sourceSets {
+            main.java.srcDirs += 'build/generated/ksp/release/kotlin/'
+        }
+    }
+}
+```
+</details>
 
 ## Import to your project
 
-Add the following dependency to your module's `build.gradle`:
-```gradle
-implementation "cafe.adriel.lyricist:lyricist:${latest-version}"
-```
-
-(Optional) Enabling [KSP](https://github.com/google/ksp/blob/main/docs/quickstart.md):
-1. Import the plugin in the root `build.gradle` then apply to your modules
+1. Importing the [KSP plugin](https://github.com/google/ksp/blob/main/docs/quickstart.md#use-your-own-processor-in-a-project) in the project's `build.gradle` then apply to your module's `build.gradle`
 ```gradle
 buildscript {
     dependencies {
@@ -176,10 +225,17 @@ buildscript {
 apply plugin: "com.google.devtools.ksp"
 ```
 
-2. Add the following dependencies
+2. Add the desired dependencies to your module's `build.gradle`
 ```gradle
-implementation "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+// Required
+implementation "cafe.adriel.lyricist:lyricist:${latest-version}"
+
+// If you want to use @Strings to generate code for you
+compileOnly "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
 ksp "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+
+// If you want to migrate from strings.xml
+ksp "cafe.adriel.lyricist:lyricist-processor-xml:${latest-version}"
 ```
 
 Current version: ![Maven Central](https://img.shields.io/maven-central/v/cafe.adriel.lyricist/lyricist?color=blue)
