@@ -14,10 +14,10 @@ Lyricist tries to make working with strings as powerful as building UIs with Com
 **Development status:** as Compose and KSP are in Beta, Lyricist will also be in Beta until they become stable.
 
 #### Features
-- [x] [Simple API](#user-content-usage) to handle locale changes and provide the current strings
-- [x] [Multi module support](#user-content-multi-module-settings)
+- [x] [Simple API](#usage) to handle locale changes and provide the current strings
+- [x] [Multi module support](#multi-module-settings)
 - [x] Code generation with [KSP](https://github.com/google/ksp)
-- [x] [Easy migration](#user-content-migrating-from-strings-xml) from `strings.xml`
+- [x] [Easy migration](#migrating-from-stringsxml) from `strings.xml`
 
 #### Limitations
 * The XML processor doesn't handle `few` and `many` [plural values](https://developer.android.com/guide/topics/resources/string-resource#Plurals) (PRs are welcome) 
