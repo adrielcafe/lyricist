@@ -10,26 +10,25 @@ import cafe.adriel.lyricist.sample.Locales
 
 @Strings(languageTag = Locales.EN, default = true)
 val EnStrings = Strings(
-    simpleString = "Hello Compose!",
+    simple = "Hello Compose!",
 
-    annotatedString = buildAnnotatedString {
+    annotated = buildAnnotatedString {
         withStyle(SpanStyle(color = Color.Red)) { append("Hello ") }
         withStyle(SpanStyle(fontWeight = FontWeight.Light)) { append("Compose!") }
     },
 
-    parameterString = { locale ->
+    parameter = { locale ->
         "Current locale: $locale"
     },
 
-    pluralString = { count ->
+    plural = { count ->
         val value = when (count) {
-            1 -> "a single apple"
-            2 -> "two apples"
-            in 3..10 -> "a bunch of apples"
-            else -> "a lot of apples"
+            1, 2 -> "few"
+            in 3..10 -> "bunch of"
+            else -> "lot of"
         }
-        "I have $value"
+        "I have a $value apples"
     },
 
-    listStrings = listOf("Avocado", "Pineapple", "Plum")
+    list = listOf("Avocado", "Pineapple", "Plum")
 )

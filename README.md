@@ -5,7 +5,7 @@
 [![License MIT](https://img.shields.io/github/license/adrielcafe/lyricist.svg?style=for-the-badge&color=orange)](https://opensource.org/licenses/MIT)
 
 # Lyricist 🌎🌍🌏 
-> The missing [I18N and I10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
+> The missing [I18N and L10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
 
 Jetpack Compose greatly improved the way we build UIs on Android, but not how we **interact with strings**. `stringResource()` works well, but doesn't benefit from the idiomatic Kotlin like Compose.
 
@@ -32,11 +32,11 @@ Take a look at the [sample app](https://github.com/adrielcafe/lyricist/tree/main
 Start by declaring your strings on a `data class`, `class` or `interface` (pick one). The strings can be anything (really, it's up to you): `Char`, `String`, `AnnotatedString`, `List<String>`, `Set<String>` or even lambdas!
 ```kotlin
 data class Strings(
-    val simpleString: String,
-    val annotatedString: AnnotatedString,
-    val parameterString: (locale: String) -> String,
-    val pluralString: (count: Int) -> String,
-    val listStrings: List<String>
+    val simple: String,
+    val annotated: AnnotatedString,
+    val parameter: (locale: String) -> String,
+    val plural: (count: Int) -> String,
+    val list: List<String>
 )
 ```
 
@@ -44,28 +44,31 @@ Next, create instances for each supported language and annotate with `@Strings`.
 ```kotlin
 @Strings(languageTag = Locales.EN, default = true)
 val EnStrings = Strings(
-    simpleString = "Hello Compose!",
+    simple = "Hello Compose!",
 
-    annotatedString = buildAnnotatedString {
-        withStyle(SpanStyle(color = Color.Red)) { append("Hello ") }
-        withStyle(SpanStyle(fontWeight = FontWeight.Light)) { append("Compose!") }
+    annotated = buildAnnotatedString {
+        withStyle(SpanStyle(color = Color.Red)) { 
+            append("Hello ") 
+        }
+        withStyle(SpanStyle(fontWeight = FontWeight.Light)) { 
+            append("Compose!") 
+        }
     },
 
-    parameterString = { locale ->
+    parameter = { locale ->
         "Current locale: $locale"
     },
 
-    pluralString = { count ->
+    plural = { count ->
         val value = when (count) {
-            1 -> "a single apple"
-            2 -> "two apples"
-            in 3..10 -> "a bunch of apples"
-            else -> "a lot of apples"
+            1, 2 -> "few"
+            in 3..10 -> "bunch of"
+            else -> "lot of"
         }
-        "I have $value"
+        "I have a $value apples"
     },
 
-    listStrings = listOf("Avocado", "Pineapple", "Plum")
+    list = listOf("Avocado", "Pineapple", "Plum")
 )
 
 @Strings(languageTag = Locales.PT)
@@ -122,25 +125,23 @@ Now you can use `LocalStrings` to retrieve the current strings.
 ```kotlin
 val strings = LocalStrings.current
 
-Text(text = strings.simpleString)
+Text(text = strings.simple)
 // > Hello Compose!
 
-Text(text = strings.annotatedString)
+Text(text = strings.annotated)
 // > Hello Compose!
 
-Text(text = strings.parameterString(lyricist.languageTag))
+Text(text = strings.parameter(lyricist.languageTag))
 // > Current locale: en
 
-Text(text = strings.pluralString(1))
-Text(text = strings.pluralString(2))
-Text(text = strings.pluralString(5))
-Text(text = strings.pluralString(20))
-// > I have a single apple
-// > I have two apples
+Text(text = strings.plural(1))
+Text(text = strings.plural(5))
+Text(text = strings.plural(20))
+// > I have a few apples
 // > I have a bunch of apples
 // > I have a lot of apples
 
-Text(text = strings.listStrings.joinToString())
+Text(text = strings.list.joinToString())
 // > Avocado, Pineapple, Plum
 ```
 

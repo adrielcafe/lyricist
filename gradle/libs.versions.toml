@@ -1,17 +1,17 @@
 [versions]
-plugin-android = "7.1.0-alpha01"
-plugin-ktlint = "10.0.0"
-plugin-maven = "0.15.1"
+plugin-android = "7.1.0-alpha03"
+plugin-ktlint = "10.1.0"
+plugin-maven = "0.17.0"
 
 kotlin = "1.5.10"
 
-ksp = "1.5.10-1.0.0-beta01"
+ksp = "1.5.10-1.0.0-beta02"
 caseFormat = "0.2.0"
 konsumeXml = "1.0"
 
 appCompat = "1.3.0"
-compose = "1.0.0-beta08"
-composeActivity = "1.3.0-beta01"
+compose = "1.0.0-rc02"
+composeActivity = "1.3.0-rc02"
 
 [libraries]
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }

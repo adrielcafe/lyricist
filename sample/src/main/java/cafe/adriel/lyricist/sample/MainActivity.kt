@@ -101,22 +101,21 @@ class MainActivity : ComponentActivity() {
             )
 
             // Simple simple
-            Text(text = LocalStrings.current.simpleString)
+            Text(text = LocalStrings.current.simple)
 
             // Annotated string
-            Text(text = LocalStrings.current.annotatedString)
+            Text(text = LocalStrings.current.annotated)
 
             // Parameter string
-            Text(text = LocalStrings.current.parameterString(lyricist.languageTag))
+            Text(text = LocalStrings.current.parameter(lyricist.languageTag))
 
             // Plural string
-            Text(text = LocalStrings.current.pluralString(1))
-            Text(text = LocalStrings.current.pluralString(2))
-            Text(text = LocalStrings.current.pluralString(5))
-            Text(text = LocalStrings.current.pluralString(20))
+            Text(text = LocalStrings.current.plural(1))
+            Text(text = LocalStrings.current.plural(5))
+            Text(text = LocalStrings.current.plural(20))
 
             // List string
-            Text(text = LocalStrings.current.listStrings.joinToString())
+            Text(text = LocalStrings.current.list.joinToString())
         }
     }
 
