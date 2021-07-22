@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/cafe.adriel.lyricist/lyricist?style=for-the-badge&color=blue)](https://repo.maven.apache.org/maven2/cafe/adriel/lyricist/)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&metadataUrl=https://s01.oss.sonatype.org/service/local/repo_groups/public/content/cafe/adriel/lyricist/lyricist/maven-metadata.xml&style=for-the-badge)](https://repo.maven.apache.org/maven2/cafe/adriel/lyricist/)
 [![Android API](https://img.shields.io/badge/api-21%2B-brightgreen.svg?style=for-the-badge)](https://android-arsenal.com/api?level=21)
 [![kotlin](https://img.shields.io/github/languages/top/adrielcafe/lyricist.svg?style=for-the-badge&color=blueviolet)](https://kotlinlang.org/)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg?style=for-the-badge)](https://ktlint.github.io/)
@@ -240,4 +240,4 @@ ksp "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
 ksp "cafe.adriel.lyricist:lyricist-processor-xml:${latest-version}"
 ```
 
-Current version: ![Maven Central](https://img.shields.io/maven-central/v/cafe.adriel.lyricist/lyricist?color=blue)
+Current version: ![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&metadataUrl=https://s01.oss.sonatype.org/service/local/repo_groups/public/content/cafe/adriel/lyricist/lyricist/maven-metadata.xml)
