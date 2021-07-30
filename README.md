@@ -11,7 +11,7 @@ Jetpack Compose greatly improved the way we build UIs on Android, but not how we
 
 Lyricist tries to make working with strings as powerful as building UIs with Compose, *i.e.*, working with parameterized string is now typesafe, use of `when` expression to work with plurals with more flexibility, and even load/update the strings dynamically via an API!
 
-**Development status:** Lyricist will be in Beta until Compose and KSP become stable.
+**Development status:** Lyricist will be in Beta until ~~Compose and~~ KSP become stable.
 
 #### Features
 - [x] [Simple API](#usage) to handle locale changes and provide the current strings
