@@ -1,6 +1,7 @@
 package cafe.adriel.lyricist.processor.internal
 
 import cafe.adriel.lyricist.processor.Strings
+import com.fleshgrinder.extensions.kotlin.toLowerCamelCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.processing.Dependencies
@@ -35,6 +36,8 @@ internal class LyricistSymbolProcessor(
         if (validate().not()) return
 
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
+
+        val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
         val defaultStrings = declarations
             .first { it.annotations.getValue<Strings, Boolean>(Strings::default.name) == true }
@@ -76,17 +79,17 @@ internal class LyricistSymbolProcessor(
                 |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
-                |private val strings = mapOf(
+                |public val $stringsName = mapOf(
                 |$translationMappingOutput
                 |)
                 |
-                |val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
+                |public val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |public fun remember$fileName(
                 |    languageTag: LanguageTag = Locale.current.toLanguageTag()
                 |): Lyricist<$stringsClassOutput> =
-                |    rememberStrings(strings, languageTag)
+                |    rememberStrings($stringsName, languageTag)
                 |
                 |@Composable
                 |public fun Provide$fileName(

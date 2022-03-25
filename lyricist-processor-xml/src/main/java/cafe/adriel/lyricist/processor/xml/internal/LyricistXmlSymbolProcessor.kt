@@ -48,8 +48,10 @@ internal class LyricistXmlSymbolProcessor(
 
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
 
+        val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
+
         strings[config.defaultLanguageTag]
-            ?.let { writeStringsClassFile(fileName, it, strings.keys) }
+            ?.let { writeStringsClassFile(fileName, stringsName, it, strings.keys) }
             ?: logger.error("Default language tag not found")
 
         strings.forEach { (languageTag, strings) ->
@@ -57,7 +59,12 @@ internal class LyricistXmlSymbolProcessor(
         }
     }
 
-    private fun writeStringsClassFile(fileName: String, strings: StringResources, languageTags: Set<String>) {
+    private fun writeStringsClassFile(
+        fileName: String,
+        stringsName: String,
+        strings: StringResources,
+        languageTags: Set<String>
+    ) {
         val values = strings
             .map { (key, value) ->
                 val type = when (value) {
@@ -104,25 +111,25 @@ internal class LyricistXmlSymbolProcessor(
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
                 |
-                |data class $fileName(
+                |public data class $fileName(
                 |$values
                 |)
                 |
-                |object Locales {
+                |public object Locales {
                 |$localesOutput
                 |}
                 |
-                |private val strings = mapOf(
+                |public val $stringsName = mapOf(
                 |$translationMappingOutput
                 |)
                 |
-                |val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
+                |public val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |public fun remember$fileName(
                 |    languageTag: LanguageTag = Locale.current.toLanguageTag()
                 |): Lyricist<$fileName> =
-                |    rememberStrings(strings, languageTag)
+                |    rememberStrings($stringsName, languageTag)
                 |
                 |@Composable
                 |public fun Provide$fileName(
