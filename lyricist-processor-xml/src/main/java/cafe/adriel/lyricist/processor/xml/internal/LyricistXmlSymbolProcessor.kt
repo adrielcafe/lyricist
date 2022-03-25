@@ -119,7 +119,7 @@ internal class LyricistXmlSymbolProcessor(
                 |$localesOutput
                 |}
                 |
-                |public val $stringsName = mapOf(
+                |public val $stringsName = mapOf<LanguageTag, $fileName>(
                 |$translationMappingOutput
                 |)
                 |

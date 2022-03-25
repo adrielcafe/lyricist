@@ -79,7 +79,7 @@ internal class LyricistSymbolProcessor(
                 |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
-                |public val $stringsName = mapOf(
+                |public val $stringsName = mapOf<LanguageTag, $stringsClassOutput>(
                 |$translationMappingOutput
                 |)
                 |
