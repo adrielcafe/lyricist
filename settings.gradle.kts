@@ -7,12 +7,13 @@ dependencyResolutionManagement {
 }
 
 include(
+    ":lyricist",
+    ":lyricist-processor",
+    ":lyricist-processor-xml",
+
     ":sample",
     ":sample-xml",
     ":sample-multi-module",
-    ":lyricist",
-    ":lyricist-processor",
-    ":lyricist-processor-xml"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
