@@ -5,20 +5,21 @@
 [![License MIT](https://img.shields.io/github/license/adrielcafe/lyricist.svg?style=for-the-badge&color=orange)](https://opensource.org/licenses/MIT)
 
 # Lyricist 🌎🌍🌏 
-> The missing [I18N and L10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
+> The missing [I18N and L10N](https://en.wikipedia.org/wiki/Internationalization_and_localization) multiplatform library for [Jetpack Compose](https://developer.android.com/jetpack/compose)!
 
 Jetpack Compose greatly improved the way we build UIs on Android, but not how we **interact with strings**. `stringResource()` works well, but doesn't benefit from the idiomatic Kotlin like Compose.
 
 Lyricist tries to make working with strings as powerful as building UIs with Compose, *i.e.*, working with parameterized string is now typesafe, use of `when` expression to work with plurals with more flexibility, and even load/update the strings dynamically via an API!
 
 #### Features
+- [x] Multiplatform: Android, Desktop
 - [x] [Simple API](#usage) to handle locale changes and provide the current strings
 - [x] [Multi module support](#multi-module-settings)
-- [x] Code generation with [KSP](https://github.com/google/ksp)
 - [x] [Easy migration](#migrating-from-stringsxml) from `strings.xml`
+- [x] Code generation with [KSP](https://github.com/google/ksp)
   
 #### Roadmap
-- [Compose for Desktop](https://github.com/JetBrains/compose-jb) support
+- iOS support
 
 #### Limitations
 * The XML processor doesn't handle `few` and `many` [plural values](https://developer.android.com/guide/topics/resources/string-resource#Plurals) (PRs are welcome) 

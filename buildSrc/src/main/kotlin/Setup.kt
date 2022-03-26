@@ -18,7 +18,7 @@ private fun BaseExtension.android() {
 }
 
 fun Project.kotlinMultiplatform(
-    withKotlinExplicitMode: Boolean = true
+    explicitMode: Boolean = true
 ) {
     extensions.configure<KotlinMultiplatformExtension> {
         android {
@@ -65,7 +65,7 @@ fun Project.kotlinMultiplatform(
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.setup(withKotlinExplicitMode)
+        kotlinOptions.setup(explicitMode)
     }
 
 }
