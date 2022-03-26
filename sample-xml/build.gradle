@@ -12,5 +12,6 @@ dependencies {
     implementation(project(":lyricist"))
     ksp(project(":lyricist-processor-xml"))
 
-    implementation libs.compose.ui
+    implementation libs.compose.runtime
+    implementation libs.compose.ui.text
 }

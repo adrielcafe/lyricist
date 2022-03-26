@@ -12,6 +12,7 @@ konsumeXml = "1.0"
 appCompat = "1.4.1"
 compose = "1.1.1"
 composeActivity = "1.4.0"
+composeMultiplatform = "1.1.1"
 
 [libraries]
 plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }
@@ -19,6 +20,7 @@ plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref =
 plugin-maven = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "plugin-maven" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+plugin-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeMultiplatform" }
 
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 caseFormat = { module = "com.fleshgrinder.kotlin:case-format", version.ref = "caseFormat" }
@@ -26,8 +28,9 @@ konsumeXml = { module = "com.gitlab.mvysny.konsume-xml:konsume-xml", version.ref
 
 appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "composeActivity" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
+compose-ui-text = { module = "androidx.compose.ui:ui-text", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 
 [bundles]
-plugins = ["plugin-android", "plugin-ktlint", "plugin-maven", "plugin-kotlin", "plugin-ksp"]
+plugins = ["plugin-android", "plugin-ktlint", "plugin-maven", "plugin-kotlin", "plugin-ksp", "plugin-compose-multiplatform"]

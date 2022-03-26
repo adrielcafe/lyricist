@@ -12,6 +12,6 @@ dependencies {
     compileOnly(project(":lyricist-processor"))
     ksp(project(":lyricist-processor"))
 
-    implementation libs.appCompat
-    implementation libs.compose.ui
+    implementation libs.compose.runtime
+    implementation libs.compose.ui.text
 }
