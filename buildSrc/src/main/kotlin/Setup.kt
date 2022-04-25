@@ -73,7 +73,7 @@ fun Project.kotlinMultiplatform(
 private fun KotlinJvmOptions.setup(
     enableExplicitMode: Boolean
 ) {
-    jvmTarget = JavaVersion.VERSION_11.toString()
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
 
     if (enableExplicitMode) freeCompilerArgs += "-Xexplicit-api=strict"
 }
