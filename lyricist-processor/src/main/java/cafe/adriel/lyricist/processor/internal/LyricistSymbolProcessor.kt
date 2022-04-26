@@ -1,6 +1,5 @@
 package cafe.adriel.lyricist.processor.internal
 
-import cafe.adriel.lyricist.processor.Strings
 import com.fleshgrinder.extensions.kotlin.toLowerCamelCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.devtools.ksp.processing.CodeGenerator
@@ -25,7 +24,7 @@ internal class LyricistSymbolProcessor(
     private val visitor = LyricistVisitor(declarations)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        resolver.getSymbolsWithAnnotation(Strings::class.java.name)
+        resolver.getSymbolsWithAnnotation(ANNOTATION_PACKAGE)
             .filter { it is KSPropertyDeclaration && it.validate() }
             .forEach { it.accept(visitor, Unit) }
 
@@ -40,7 +39,7 @@ internal class LyricistSymbolProcessor(
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
         val defaultStrings = declarations
-            .first { it.annotations.getValue<Strings, Boolean>(Strings::default.name) == true }
+            .first { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
         val packagesOutput = declarations
             .mapNotNull { it.qualifiedName?.asString() }
@@ -53,7 +52,7 @@ internal class LyricistSymbolProcessor(
 
         val translationMappingOutput = declarations
             .map {
-                it.annotations.getValue<Strings, String>(Strings::languageTag.name)!! to it.simpleName.getShortName()
+                it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)!! to it.simpleName.getShortName()
             }.joinToString(",\n") { (languageTag, property) ->
                 "$INDENTATION\"$languageTag\" to $property"
             }
@@ -93,7 +92,7 @@ internal class LyricistSymbolProcessor(
                 |
                 |@Composable
                 |public fun Provide$fileName(
-                |    lyricist: Lyricist<$stringsClassOutput>,
+                |    lyricist: Lyricist<$stringsClassOutput> = remember$fileName(),
                 |    content: @Composable () -> Unit
                 |) {
                 |    ProvideStrings(lyricist, Local$fileName, content)
@@ -105,7 +104,7 @@ internal class LyricistSymbolProcessor(
 
     private fun validate(): Boolean {
         val defaultCount = declarations
-            .count { it.annotations.getValue<Strings, Boolean>(Strings::default.name) == true }
+            .count { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
         val differentTypeCount = declarations
             .groupBy { it.getClassQualifiedName() }
@@ -113,15 +112,15 @@ internal class LyricistSymbolProcessor(
 
         return when {
             defaultCount == 0 -> {
-                logger.exception(IllegalArgumentException("No @Strings(default = true) found"))
+                logger.exception(IllegalArgumentException("No @LyricistStrings(default = true) found"))
                 false
             }
             defaultCount > 1 -> {
-                logger.exception(IllegalArgumentException("More than one @Strings(default = true) found"))
+                logger.exception(IllegalArgumentException("More than one @LyricistStrings(default = true) found"))
                 false
             }
             differentTypeCount != 1 -> {
-                logger.exception(IllegalArgumentException("All @Strings must have the same type"))
+                logger.exception(IllegalArgumentException("All @LyricistStrings must have the same type"))
                 false
             }
             else -> true
@@ -134,9 +133,10 @@ internal class LyricistSymbolProcessor(
     private fun KSPropertyDeclaration.getClassQualifiedName(): String? =
         getter?.returnType?.resolve()?.declaration?.qualifiedName?.asString()
 
-    private inline fun <reified A : Annotation, reified T> Sequence<KSAnnotation>.getValue(argumentName: String): T? =
-        withName(A::class.simpleName!!)
-            ?.arguments?.withName(argumentName)
+    private inline fun <reified T> Sequence<KSAnnotation>.getValue(argumentName: String): T? =
+        withName(ANNOTATION_NAME)
+            ?.arguments
+            ?.withName(argumentName)
             ?.value as? T
 
     private fun Sequence<KSAnnotation>.withName(name: String): KSAnnotation? =
@@ -147,5 +147,10 @@ internal class LyricistSymbolProcessor(
 
     private companion object {
         val INDENTATION = " ".repeat(4)
+
+        const val ANNOTATION_NAME = "LyricistStrings"
+        const val ANNOTATION_PACKAGE = "cafe.adriel.lyricist.$ANNOTATION_NAME"
+        const val ANNOTATION_PARAM_LANGUAGE_TAG = "languageTag"
+        const val ANNOTATION_PARAM_DEFAULT = "default"
     }
 }

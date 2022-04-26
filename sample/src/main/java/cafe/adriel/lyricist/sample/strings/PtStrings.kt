@@ -5,10 +5,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import cafe.adriel.lyricist.processor.Strings
+import cafe.adriel.lyricist.LyricistStrings
 import cafe.adriel.lyricist.sample.Locales
 
-@Strings(languageTag = Locales.PT)
+@LyricistStrings(languageTag = Locales.PT)
 val PtStrings = Strings(
     simple = "Olá Compose!",
 

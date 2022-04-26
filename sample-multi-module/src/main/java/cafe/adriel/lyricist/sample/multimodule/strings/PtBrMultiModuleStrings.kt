@@ -1,8 +1,8 @@
 package cafe.adriel.lyricist.sample.multimodule.strings
 
-import cafe.adriel.lyricist.processor.Strings
+import cafe.adriel.lyricist.LyricistStrings
 
-@Strings(languageTag = "pt")
+@LyricistStrings(languageTag = "pt")
 val PtMultiModuleStrings = MultiModuleStrings(
     string = "Olá Compose!"
 )
