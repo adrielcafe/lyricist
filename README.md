@@ -41,9 +41,9 @@ data class Strings(
 )
 ```
 
-Next, create instances for each supported language and annotate with `@Strings`. The `languageTag` must be an [IETF BCP47](https://en.wikipedia.org/wiki/IETF_language_tag) compliant language tag ([docs](https://developer.android.com/guide/topics/resources/providing-resources#LocaleQualifier)). You must flag one of them as default.
+Next, create instances for each supported language and annotate with `@LyricistStrings`. The `languageTag` must be an [IETF BCP47](https://en.wikipedia.org/wiki/IETF_language_tag) compliant language tag ([docs](https://developer.android.com/guide/topics/resources/providing-resources#LocaleQualifier)). You must flag one of them as default.
 ```kotlin
-@Strings(languageTag = Locales.EN, default = true)
+@LyricistStrings(languageTag = Locales.EN, default = true)
 val EnStrings = Strings(
     simple = "Hello Compose!",
 
@@ -72,13 +72,13 @@ val EnStrings = Strings(
     list = listOf("Avocado", "Pineapple", "Plum")
 )
 
-@Strings(languageTag = Locales.PT)
+@LyricistStrings(languageTag = Locales.PT)
 val PtStrings = Strings(/* pt strings */)
 
-@Strings(languageTag = Locales.ES)
+@LyricistStrings(languageTag = Locales.ES)
 val EsStrings = Strings(/* es strings */)
 
-@Strings(languageTag = Locales.RU)
+@LyricistStrings(languageTag = Locales.RU)
 val RuStrings = Strings(/* ru strings */)
 ```
 
@@ -87,6 +87,11 @@ Lyricist will generate the `LocalStrings` property, a [CompositionLocal](https:/
 val lyricist = rememberStrings()
 
 ProvideStrings(lyricist) {
+    // Content
+}
+
+// Or just 
+ProvideStrings {
     // Content
 }
 ```
@@ -233,8 +238,7 @@ apply plugin: "com.google.devtools.ksp"
 // Required
 implementation "cafe.adriel.lyricist:lyricist:${latest-version}"
 
-// If you want to use @Strings to generate code for you
-compileOnly "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+// If you want to use @LyricistStrings to generate code for you
 ksp "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
 
 // If you want to migrate from strings.xml
