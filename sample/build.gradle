@@ -13,7 +13,6 @@ dependencies {
     implementation(project(":sample-xml"))
 
     implementation(project(":lyricist"))
-    compileOnly(project(":lyricist-processor"))
     ksp(project(":lyricist-processor"))
 
     implementation libs.appCompat

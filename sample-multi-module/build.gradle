@@ -9,7 +9,6 @@ ksp {
 
 dependencies {
     implementation(project(":lyricist"))
-    compileOnly(project(":lyricist-processor"))
     ksp(project(":lyricist-processor"))
 
     implementation libs.compose.runtime
