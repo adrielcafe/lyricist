@@ -38,6 +38,11 @@ internal class LyricistSymbolProcessor(
 
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
+        val defaultLanguageTag = declarations
+            .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
+            ?.let { "\"$it\"" }
+            ?: "Locale.current.toLanguageTag()"
+
         val defaultStrings = declarations
             .first { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
@@ -86,7 +91,7 @@ internal class LyricistSymbolProcessor(
                 |
                 |@Composable
                 |public fun remember$fileName(
-                |    languageTag: LanguageTag = Locale.current.toLanguageTag()
+                |    languageTag: LanguageTag = $defaultLanguageTag
                 |): Lyricist<$stringsClassOutput> =
                 |    rememberStrings($stringsName, languageTag)
                 |
@@ -132,6 +137,16 @@ internal class LyricistSymbolProcessor(
 
     private fun KSPropertyDeclaration.getClassQualifiedName(): String? =
         getter?.returnType?.resolve()?.declaration?.qualifiedName?.asString()
+
+    private fun Sequence<KSAnnotation>.getDefaultLanguageTag(): String? =
+        firstOrNull {
+            withName(ANNOTATION_NAME)
+                ?.arguments
+                ?.withName(ANNOTATION_PARAM_DEFAULT)
+                ?.value == true
+        }?.arguments
+            ?.withName(ANNOTATION_PARAM_LANGUAGE_TAG)
+            ?.value as? String
 
     private inline fun <reified T> Sequence<KSAnnotation>.getValue(argumentName: String): T? =
         withName(ANNOTATION_NAME)
