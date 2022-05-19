@@ -8,6 +8,10 @@ android {
     }
 }
 
+ksp {
+    arg("lyricist.internalVisibility", "true")
+}
+
 dependencies {
     implementation(project(":sample-multi-module"))
     implementation(project(":sample-xml"))

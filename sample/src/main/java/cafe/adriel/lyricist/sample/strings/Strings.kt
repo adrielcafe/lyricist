@@ -2,7 +2,7 @@ package cafe.adriel.lyricist.sample.strings
 
 import androidx.compose.ui.text.AnnotatedString
 
-data class Strings(
+internal data class Strings(
     val simple: String,
     val annotated: AnnotatedString,
     val parameter: (locale: String) -> String,

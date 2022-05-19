@@ -9,7 +9,7 @@ import cafe.adriel.lyricist.LyricistStrings
 import cafe.adriel.lyricist.sample.Locales
 
 @LyricistStrings(languageTag = Locales.PT)
-val PtStrings = Strings(
+internal val PtStrings = Strings(
     simple = "Olá Compose!",
 
     annotated = buildAnnotatedString {

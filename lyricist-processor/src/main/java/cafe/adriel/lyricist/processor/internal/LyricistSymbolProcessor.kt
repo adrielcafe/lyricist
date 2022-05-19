@@ -38,6 +38,8 @@ internal class LyricistSymbolProcessor(
 
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
+        val visibility = if (config.internalVisibility) "internal" else "public"
+
         val defaultLanguageTag = declarations
             .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
             ?.let { "\"$it\"" }
@@ -83,20 +85,20 @@ internal class LyricistSymbolProcessor(
                 |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
-                |public val $stringsName = mapOf<LanguageTag, $stringsClassOutput>(
+                |$visibility val $stringsName = mapOf<LanguageTag, $stringsClassOutput>(
                 |$translationMappingOutput
                 |)
                 |
-                |public val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
+                |$visibility val Local$fileName = staticCompositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
-                |public fun remember$fileName(
+                |$visibility fun remember$fileName(
                 |    languageTag: LanguageTag = $defaultLanguageTag
                 |): Lyricist<$stringsClassOutput> =
                 |    rememberStrings($stringsName, languageTag)
                 |
                 |@Composable
-                |public fun Provide$fileName(
+                |$visibility fun Provide$fileName(
                 |    lyricist: Lyricist<$stringsClassOutput> = remember$fileName(),
                 |    content: @Composable () -> Unit
                 |) {
