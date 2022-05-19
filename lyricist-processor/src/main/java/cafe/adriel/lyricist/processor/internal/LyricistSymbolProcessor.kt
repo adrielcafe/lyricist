@@ -117,7 +117,7 @@ internal class LyricistSymbolProcessor(
 
         return when {
             defaultCount == 0 -> {
-                logger.exception(IllegalArgumentException("No @LyricistStrings(default = true) found"))
+                logger.warn("No @LyricistStrings(default = true) found")
                 false
             }
             defaultCount > 1 -> {
