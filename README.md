@@ -156,6 +156,14 @@ Use the Lyricist instance provided by `rememberStrings()` to change the current 
 lyricist.languageTag = Locales.PT
 ```
 
+### Controlling the visibility
+To control the visibility (`public` or `internal`) of the generated code, provide the following (optional) argument to KSP in the module's `build.gradle`.
+```gradle
+ksp {
+    arg("lyricist.internalVisibility", "true")
+}
+```
+
 **Important:** Lyricist uses the System locale as default. It won't persist the current locale on storage, is outside its scope.
 
 ## Multi module settings
