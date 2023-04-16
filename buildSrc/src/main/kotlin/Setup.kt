@@ -20,7 +20,6 @@ private fun BaseExtension.android() {
 fun Project.kotlinMultiplatform(
     withKotlinExplicitMode: Boolean = true,
     iosPrefixName: String = "ios", // only used in ios sample
-    ignoreJs: Boolean = false, // KSP does not support JS IR https://github.com/google/ksp/issues/1056
 ) {
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
         extensions.configure<KotlinMultiplatformExtension> {
@@ -38,10 +37,8 @@ fun Project.kotlinMultiplatform(
             }
             jvm("desktop")
 
-            if (ignoreJs.not()) {
-                js(IR) {
-                    browser()
-                }
+            js(IR) {
+                browser()
             }
             macosX64()
             macosArm64()
