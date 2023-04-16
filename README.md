@@ -12,14 +12,11 @@ Jetpack Compose greatly improved the way we build UIs on Android, but not how we
 Lyricist tries to make working with strings as powerful as building UIs with Compose, *i.e.*, working with parameterized string is now typesafe, use of `when` expression to work with plurals with more flexibility, and even load/update the strings dynamically via an API!
 
 #### Features
-- [x] Multiplatform: Android, Desktop
+- [x] Multiplatform: Android, Desktop, iOS, Web (JsCanvas)
 - [x] [Simple API](#usage) to handle locale changes and provide the current strings
 - [x] [Multi module support](#multi-module-settings)
 - [x] [Easy migration](#migrating-from-stringsxml) from `strings.xml`
 - [x] Code generation with [KSP](https://github.com/google/ksp)
-  
-#### Roadmap
-- iOS support
 
 #### Limitations
 * The XML processor doesn't handle `few` and `many` [plural values](https://developer.android.com/guide/topics/resources/string-resource#Plurals) (PRs are welcome) 
@@ -231,26 +228,52 @@ buildTypes {
 ## Import to your project
 
 1. Importing the [KSP plugin](https://github.com/google/ksp/blob/main/docs/quickstart.md#use-your-own-processor-in-a-project) in the project's `build.gradle` then apply to your module's `build.gradle`
-```gradle
-buildscript {
-    dependencies {
-        classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${ksp-latest-version}"
-    }
+```kotlin
+plugins {
+    id("com.google.devtools.ksp") version "${ksp-latest-version}"
 }
-
-apply plugin: "com.google.devtools.ksp"
 ```
 
 2. Add the desired dependencies to your module's `build.gradle`
-```gradle
+```kotlin
 // Required
-implementation "cafe.adriel.lyricist:lyricist:${latest-version}"
+implementation("cafe.adriel.lyricist:lyricist:${latest-version}")
 
 // If you want to use @LyricistStrings to generate code for you
-ksp "cafe.adriel.lyricist:lyricist-processor:${latest-version}"
+ksp("cafe.adriel.lyricist:lyricist-processor:${latest-version}")
 
 // If you want to migrate from strings.xml
-ksp "cafe.adriel.lyricist:lyricist-processor-xml:${latest-version}"
+ksp("cafe.adriel.lyricist:lyricist-processor-xml:${latest-version}")
+```
+
+#### Multiplatform setup
+
+Doing code generation only at `commonMain`. Currently workaround, for more information see [KSP Issue 567](https://github.com/google/ksp/issues/567)
+```kotlin
+dependencies {
+    add("kspCommonMainMetadata", "cafe.adriel.lyricist:lyricist-processor:${latest-version}")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
+    if(name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+
+kotlin.sourceSets.commonMain {
+    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+}
+```
+
+#### Version Catalog
+```toml
+[versions]
+lyricist = {latest-version}
+
+[libraries]
+lyricist-library = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+lyricist-processor = { module = "cafe.adriel.lyricist:lyricist-processor", version.ref = "lyricist" }
+lyricist-processorXml = { module = "cafe.adriel.lyricist:lyricist-processor-xml", version.ref = "lyricist" }
 ```
 
 Current version: ![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&metadataUrl=https://s01.oss.sonatype.org/service/local/repo_groups/public/content/cafe/adriel/lyricist/lyricist/maven-metadata.xml)
