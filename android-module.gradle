@@ -24,7 +24,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
+        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,6 +32,5 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-        useIR = true
     }
 }

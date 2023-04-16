@@ -1,8 +1,9 @@
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev" )
     }
 }
 
@@ -14,6 +15,7 @@ include(
     ":sample",
     ":sample-xml",
     ":sample-multi-module",
+    ":sample-multiplatform",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
