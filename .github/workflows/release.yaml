@@ -6,7 +6,7 @@ on:
 jobs:
 
   release:
-    name: Publish to Maven Central
+    name: Publish Lyricist
     runs-on: macOS-latest
     steps:
 
