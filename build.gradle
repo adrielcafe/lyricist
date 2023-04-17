@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        google()
         mavenCentral()
+        google()
         gradlePluginPortal()
         maven { url "https://maven.pkg.jetbrains.space/public/p/compose/dev" }
     }
@@ -12,14 +12,4 @@ buildscript {
 
 subprojects {
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
-    plugins.withId("com.vanniktech.maven.publish") {
-        mavenPublish {
-            sonatypeHost = "S01"
-        }
-    }
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://maven.pkg.jetbrains.space/public/p/compose/dev" }
-    }
 }
