@@ -104,18 +104,6 @@ android {
     defaultConfig {
         applicationId = "cafe.adriel.lyricist.sample.multiplatform"
     }
-
-    //ksp configuration
-    sourceSets {
-        getByName("debug") {
-            val kspSource = "android/androidDebug"
-            java.srcDir("build/generated/ksp/$kspSource/kotlin/")
-        }
-        getByName("release") {
-            val kspSource = "android/androidRelease"
-            java.srcDir("build/generated/ksp/$kspSource/kotlin/")
-        }
-    }
 }
 
 ksp {

@@ -23,9 +23,6 @@ fun Project.kotlinMultiplatform(
 ) {
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
         extensions.configure<KotlinMultiplatformExtension> {
-            val compose =
-                (this as org.gradle.api.plugins.ExtensionAware).extensions.getByName("compose") as org.jetbrains.compose.ComposePlugin.Dependencies
-
             if (withKotlinExplicitMode) {
                 explicitApi()
             }
