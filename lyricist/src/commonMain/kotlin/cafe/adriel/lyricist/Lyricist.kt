@@ -4,13 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-@Target(AnnotationTarget.PROPERTY)
-@Retention(AnnotationRetention.SOURCE)
-public annotation class LyricistStrings(
-    val languageTag: LanguageTag,
-    val default: Boolean = false
-)
-
 public class Lyricist<T>(
     private val defaultLanguageTag: LanguageTag,
     private val translations: Map<LanguageTag, T>

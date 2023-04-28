@@ -9,6 +9,7 @@ dependencyResolutionManagement {
 
 include(
     ":lyricist",
+    ":lyricist-core",
     ":lyricist-processor",
     ":lyricist-processor-xml",
 
