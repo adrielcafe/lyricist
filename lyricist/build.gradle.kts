@@ -11,6 +11,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                api(project(":lyricist-core"))
                 compileOnly(compose.runtime)
                 compileOnly(compose.ui)
             }

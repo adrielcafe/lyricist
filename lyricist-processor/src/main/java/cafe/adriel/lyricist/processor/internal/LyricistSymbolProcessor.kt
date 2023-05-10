@@ -77,6 +77,7 @@ internal class LyricistSymbolProcessor(
                 |package ${config.packageName}
                 |
                 |import androidx.compose.runtime.Composable
+                |import androidx.compose.runtime.ProvidableCompositionLocal
                 |import androidx.compose.runtime.compositionLocalOf
                 |import androidx.compose.ui.text.intl.Locale
                 |import cafe.adriel.lyricist.Lyricist
@@ -85,12 +86,11 @@ internal class LyricistSymbolProcessor(
                 |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
-                |$visibility val $stringsName = mapOf<LanguageTag, $stringsClassOutput>(
+                |$visibility val $stringsName: Map<LanguageTag, $stringsClassOutput> = mapOf(
                 |$translationMappingOutput
                 |)
                 |
-                |$visibility val Local$fileName = compositionLocalOf { 
-$defaultStringsOutput }
+                |$visibility val Local$fileName: ProvidableCompositionLocal<$stringsClassOutput> = compositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |$visibility fun remember$fileName(

@@ -6,8 +6,6 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.intl.Locale
 
-public typealias LanguageTag = String
-
 @Composable
 public fun <T> rememberStrings(
     translations: Map<LanguageTag, T>,

@@ -18,62 +18,97 @@ private fun BaseExtension.android() {
 }
 
 fun Project.kotlinMultiplatform(
-    explicitMode: Boolean = true
+    withKotlinExplicitMode: Boolean = true,
+    iosPrefixName: String = "ios", // only used in ios sample
 ) {
-    extensions.configure<KotlinMultiplatformExtension> {
-        android {
-            publishAllLibraryVariants()
+    plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
+        extensions.configure<KotlinMultiplatformExtension> {
+            if (withKotlinExplicitMode) {
+                explicitApi()
+            }
+
+            android {
+                if (project.plugins.hasPlugin("com.vanniktech.maven.publish")) {
+                    publishLibraryVariants("release")
+                }
+            }
+            jvm("desktop")
+
+            js(IR) {
+                browser()
+            }
+            macosX64()
+            macosArm64()
+            ios(iosPrefixName)
+            iosSimulatorArm64("${iosPrefixName}SimulatorArm64")
+
+            sourceSets {
+                /* Source sets structure
+                common
+                  ├─ jvm
+                      ├─ android
+                      ├─ desktop
+                 */
+                val commonMain by getting
+                val commonTest by getting
+                val jvmMain by creating {
+                    dependsOn(commonMain)
+                }
+                val jvmTest by creating {
+                    dependsOn(commonTest)
+                }
+
+                val desktopMain by getting {
+                    dependsOn(jvmMain)
+                }
+                val androidMain by getting {
+                    dependsOn(jvmMain)
+                }
+                val desktopTest by getting {
+                    dependsOn(jvmTest)
+                }
+
+                val nativeMain by creating {
+                    dependsOn(commonMain)
+                }
+
+                val macosMain by creating {
+                    dependsOn(nativeMain)
+                }
+                val macosX64Main by getting {
+                    dependsOn(macosMain)
+                }
+                val macosArm64Main by getting {
+                    dependsOn(macosMain)
+                }
+                val iosMain = getByName(iosPrefixName + "Main").apply {
+                    dependsOn(nativeMain)
+                }
+                val iosSimulatorArm64Main = getByName(iosPrefixName + "SimulatorArm64Main").apply {
+                    dependsOn(iosMain)
+                }
+            }
         }
-        jvm("desktop")
 
-        sourceSets {
-            /* Source sets structure
-            common
-              ├─ jvm
-                  ├─ android
-                  ├─ desktop
-             */
-            val commonMain by getting
-            val commonTest by getting
+        findAndroidExtension().apply {
+            android()
+            sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        }
 
-            val jvmMain by creating {
-                dependsOn(commonMain)
-            }
-            val jvmTest by creating {
-                dependsOn(commonTest)
-            }
-
-            val androidMain by getting {
-                dependsOn(jvmMain)
-            }
-            val androidTest by getting {
-                dependsOn(jvmTest)
-            }
-
-            val desktopMain by getting {
-                dependsOn(jvmMain)
-            }
-            val desktopTest by getting {
-                dependsOn(jvmTest)
-            }
+        tasks.withType<KotlinCompile> {
+            kotlinOptions.configureKotlinJvmOptions(withKotlinExplicitMode)
         }
     }
-
-    extensions.configure<LibraryExtension> {
-        android()
-        sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    }
-
-    tasks.withType<KotlinCompile> {
-        kotlinOptions.setup(explicitMode)
-    }
-
 }
 
-private fun KotlinJvmOptions.setup(
+private fun KotlinJvmOptions.configureKotlinJvmOptions(
     enableExplicitMode: Boolean
 ) {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
 
     if (enableExplicitMode) freeCompilerArgs += "-Xexplicit-api=strict"
 }
+
+private fun Project.findAndroidExtension(): BaseExtension = extensions.findByType<LibraryExtension>()
+    ?: extensions.findByType<com.android.build.gradle.AppExtension>()
+    ?: error("Could not found Android application or library plugin applied on module $name")
