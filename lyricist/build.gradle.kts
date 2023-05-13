@@ -12,6 +12,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":lyricist-core"))
+                api(libs.kotlinx.immutable.collections)
                 compileOnly(compose.runtime)
                 compileOnly(compose.ui)
             }

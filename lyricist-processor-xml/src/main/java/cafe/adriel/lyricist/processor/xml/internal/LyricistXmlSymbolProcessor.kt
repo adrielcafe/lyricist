@@ -105,12 +105,14 @@ internal class LyricistXmlSymbolProcessor(
                 |
                 |import androidx.compose.runtime.Composable
                 |import androidx.compose.runtime.ProvidableCompositionLocal
-                |import androidx.compose.runtime.staticCompositionLocalOf
+                |import androidx.compose.runtime.compositionLocalOf
                 |import androidx.compose.ui.text.intl.Locale
                 |import cafe.adriel.lyricist.Lyricist
                 |import cafe.adriel.lyricist.LanguageTag
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
+                |import kotlinx.collections.immutable.ImmutableMap
+                |import kotlinx.collections.immutable.persistentMapOf
                 |
                 |public data class $fileName(
                 |$values
@@ -120,11 +122,11 @@ internal class LyricistXmlSymbolProcessor(
                 |$localesOutput
                 |}
                 |
-                |public val $stringsName: Map<LanguageTag, $fileName> = mapOf(
+                |public val $stringsName: ImmutableMap<LanguageTag, $fileName> = persistentMapOf(
                 |$translationMappingOutput
                 |)
                 |
-                |public val Local$fileName: ProvidableCompositionLocal<$fileName> = staticCompositionLocalOf { $defaultStringsOutput }
+                |public val Local$fileName: ProvidableCompositionLocal<$fileName> = compositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |public fun remember$fileName(

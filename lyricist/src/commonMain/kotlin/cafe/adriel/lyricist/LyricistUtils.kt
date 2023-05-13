@@ -5,10 +5,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.remember
 import androidx.compose.ui.text.intl.Locale
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
 @Composable
 public fun <T> rememberStrings(
-    translations: Map<LanguageTag, T>,
+    translations: ImmutableMap<LanguageTag, T> = persistentMapOf(),
     languageTag: LanguageTag = Locale.current.toLanguageTag()
 ): Lyricist<T> =
     remember { Lyricist(languageTag, translations) }

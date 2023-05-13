@@ -84,9 +84,11 @@ internal class LyricistSymbolProcessor(
                 |import cafe.adriel.lyricist.LanguageTag
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
+                |import kotlinx.collections.immutable.ImmutableMap
+                |import kotlinx.collections.immutable.persistentMapOf
                 |$packagesOutput
                 |
-                |$visibility val $stringsName: Map<LanguageTag, $stringsClassOutput> = mapOf(
+                |$visibility val $stringsName: ImmutableMap<LanguageTag, $stringsClassOutput> = persistentMapOf(
                 |$translationMappingOutput
                 |)
                 |
