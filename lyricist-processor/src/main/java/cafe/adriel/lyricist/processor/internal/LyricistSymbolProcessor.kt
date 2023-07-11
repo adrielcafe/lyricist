@@ -20,19 +20,24 @@ internal class LyricistSymbolProcessor(
 ) : SymbolProcessor {
 
     private val declarations = mutableListOf<KSPropertyDeclaration>()
+    private val previousRoundDeclarations = mutableSetOf<KSPropertyDeclaration>()
 
     private val visitor = LyricistVisitor(declarations)
+    private var generatedInPreviousRounds: Boolean = false
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        resolver.getSymbolsWithAnnotation(ANNOTATION_PACKAGE)
+        declarations.clear()
+        val lyricistSymbols = resolver.getSymbolsWithAnnotation(ANNOTATION_PACKAGE)
             .filter { it is KSPropertyDeclaration && it.validate() }
-            .forEach { it.accept(visitor, Unit) }
+            .toList()
 
-        return emptyList()
-    }
+        lyricistSymbols.forEach { it.accept(visitor, Unit) }
 
-    override fun finish() {
-        if (validate().not()) return
+        val roundDeclaration =
+            declarations.filterNot { dec -> previousRoundDeclarations.any { it.qualifiedName == dec.qualifiedName } }
+        previousRoundDeclarations += declarations
+
+        if (validate(roundDeclaration).not()) return emptyList()
 
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
 
@@ -40,15 +45,15 @@ internal class LyricistSymbolProcessor(
 
         val visibility = if (config.internalVisibility) "internal" else "public"
 
-        val defaultLanguageTag = declarations
+        val defaultLanguageTag = roundDeclaration
             .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
             ?.let { "\"$it\"" }
             ?: "Locale.current.toLanguageTag()"
 
-        val defaultStrings = declarations
+        val defaultStrings = roundDeclaration
             .first { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
-        val packagesOutput = declarations
+        val packagesOutput = roundDeclaration
             .mapNotNull { it.qualifiedName?.asString() }
             .plus(defaultStrings.getClassQualifiedName())
             .joinToString(separator = "\n") { packageName -> "import $packageName" }
@@ -57,7 +62,7 @@ internal class LyricistSymbolProcessor(
 
         val defaultStringsOutput = defaultStrings.simpleName.getShortName()
 
-        val translationMappingOutput = declarations
+        val translationMappingOutput = roundDeclaration
             .map {
                 it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)!! to it.simpleName.getShortName()
             }.joinToString(",\n") { (languageTag, property) ->
@@ -67,7 +72,7 @@ internal class LyricistSymbolProcessor(
         codeGenerator.createNewFile(
             dependencies = Dependencies(
                 aggregating = true,
-                sources = declarations.map { it.containingFile!! }.toTypedArray()
+                sources = roundDeclaration.map { it.containingFile!! }.toTypedArray()
             ),
             packageName = config.packageName,
             fileName = fileName
@@ -108,29 +113,41 @@ internal class LyricistSymbolProcessor(
                 """.trimMargin().toByteArray()
             )
         }
+
+        generatedInPreviousRounds = true
+
+        return emptyList()
     }
 
-    private fun validate(): Boolean {
-        val defaultCount = declarations
+    private fun validate(properties: List<KSPropertyDeclaration>): Boolean {
+        val defaultCount = properties
             .count { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
-        val differentTypeCount = declarations
+        val differentTypeCount = properties
             .groupBy { it.getClassQualifiedName() }
             .count()
 
         return when {
+            generatedInPreviousRounds -> {
+                // ignore code generation if is a new round and did already generated previously
+                false
+            }
+
             defaultCount == 0 -> {
                 logger.warn("No @LyricistStrings(default = true) found")
                 false
             }
+
             defaultCount > 1 -> {
                 logger.exception(IllegalArgumentException("More than one @LyricistStrings(default = true) found"))
                 false
             }
+
             differentTypeCount != 1 -> {
                 logger.exception(IllegalArgumentException("All @LyricistStrings must have the same type"))
                 false
             }
+
             else -> true
         }
     }
