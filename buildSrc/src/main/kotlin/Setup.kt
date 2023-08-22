@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.LibraryExtension
 
 private fun BaseExtension.android() {
-    compileSdkVersion(31)
+    compileSdkVersion(32)
     defaultConfig {
         minSdk = 21
         targetSdk = 31

@@ -76,9 +76,9 @@ internal class LyricistXmlSymbolProcessor(
                     is StringResource.StringArray -> "List<String>"
                     is StringResource.Plurals -> "(quantity: Int) -> String"
                 }
-                "val ${key.toLowerCamelCase()}: $type"
+                "lateinit var ${key.toLowerCamelCase()}: $type"
             }
-            .joinToString(",\n") { "$INDENTATION$it" }
+            .joinToString("\n") { "$INDENTATION$it" }
 
         val translationMappingOutput = languageTags
             .map { languageTag ->
@@ -112,9 +112,9 @@ internal class LyricistXmlSymbolProcessor(
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
                 |
-                |public data class $fileName(
+                |public class $fileName {
                 |$values
-                |)
+                |}
                 |
                 |public object Locales {
                 |$localesOutput
@@ -182,7 +182,7 @@ internal class LyricistXmlSymbolProcessor(
                 }
                 "${key.toLowerCamelCase()} = $resourceValue"
             }
-            .joinToString(",\n\n") { "$INDENTATION$it" }
+            .joinToString("\n\n") { "$INDENTATION$it" }
 
         codeGenerator.createNewFile(
             dependencies = Dependencies(aggregating = true),
@@ -193,9 +193,9 @@ internal class LyricistXmlSymbolProcessor(
                 """
                 |package ${config.packageName}
                 |
-                |val $propertyName = $fileName(
-                |$values
-                |)
+                |val $propertyName = $fileName().apply {
+                |  $values
+                |}
                 """.trimMargin().toByteArray()
             )
         }
