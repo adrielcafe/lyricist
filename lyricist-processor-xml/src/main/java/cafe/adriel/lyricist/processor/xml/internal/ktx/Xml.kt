@@ -43,8 +43,9 @@ internal fun File.getXmlStrings(): ResourceValues {
 private fun ResourceValues.applyReplacements(): ResourceValues {
     val values = toMutableList()
 
-    // We need to do a late replacements because Konsume XML resolves everything "on-demand"
-    // so trying to replace value of "A" node in "B" while "B" is being resolved is impossible
+    // We need to do late replacements because Konsume XML resolves everything on-demand,
+    // there's no get("something") so trying to replace value of "A" node in "B" while "B" is
+    // being resolved is impossible
     for (replacement in replacements) {
         val index = values.indexOfFirst { (key, _) -> key == replacement }
         val (key, resource) = values[index]
