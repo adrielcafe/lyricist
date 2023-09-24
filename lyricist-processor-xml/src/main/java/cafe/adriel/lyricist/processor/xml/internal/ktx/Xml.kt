@@ -29,9 +29,9 @@ internal fun FileTreeWalk.filterXmlStringFiles(): Sequence<File> =
             it.parentFile.name.startsWith(VALUES_FOLDER_NAME, ignoreCase = true)
     }
 
-private typealias ResourceValues = List<Pair<ResourceName, StringResource>>
+private typealias ResourceNodes = List<Pair<ResourceName, StringResource>>
 
-internal fun File.getXmlStrings(): ResourceValues {
+internal fun File.getXmlStrings(): ResourceNodes {
     replacements = mutableListOf()
     return konsumeXml()
         .child(TAG_RESOURCES) {
@@ -40,7 +40,7 @@ internal fun File.getXmlStrings(): ResourceValues {
         .applyReplacements()
 }
 
-private fun ResourceValues.applyReplacements(): ResourceValues {
+private fun ResourceNodes.applyReplacements(): ResourceNodes {
     val values = toMutableList()
 
     // We need to do late replacements because Konsume XML resolves everything on-demand,
@@ -69,7 +69,7 @@ private fun ResourceValues.applyReplacements(): ResourceValues {
     return values
 }
 
-private fun replaceResourceValueExpr(currentValue: String, values: ResourceValues) =
+private fun replaceResourceValueExpr(currentValue: String, values: ResourceNodes) =
     ReplacementExpr.replace(currentValue) { match ->
         val target = match.groupValues.last()
         // Searches for `<string name="...">`
@@ -77,7 +77,7 @@ private fun replaceResourceValueExpr(currentValue: String, values: ResourceValue
         (resource as StringResource.PlainString).value
     }
 
-private fun Konsumer.getPlainStrings(): ResourceValues =
+private fun Konsumer.getPlainStrings(): ResourceNodes =
     children(TAG_STRING) {
         val attr = attributes[ATTRIBUTE_NAME]
         attr to StringResource.PlainString(
@@ -85,7 +85,7 @@ private fun Konsumer.getPlainStrings(): ResourceValues =
         )
     }
 
-private fun Konsumer.getStringArrays(): ResourceValues =
+private fun Konsumer.getStringArrays(): ResourceNodes =
     children(TAG_STRING_ARRAY) {
         val attr = attributes[ATTRIBUTE_NAME]
         attr to StringResource.StringArray(
@@ -93,7 +93,7 @@ private fun Konsumer.getStringArrays(): ResourceValues =
         )
     }
 
-private fun Konsumer.getPlurals(): ResourceValues =
+private fun Konsumer.getPlurals(): ResourceNodes =
     children(TAG_PLURALS) {
         val attr = attributes[ATTRIBUTE_NAME]
         attr to StringResource.Plurals(
