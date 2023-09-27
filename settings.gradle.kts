@@ -8,15 +8,16 @@ dependencyResolutionManagement {
 }
 
 include(
-    ":lyricist",
+    ":lyricist-compose",
     ":lyricist-core",
-    ":lyricist-processor",
-    ":lyricist-processor-xml",
-
-    ":sample",
-    ":sample-xml",
-    ":sample-multi-module",
-    ":sample-multiplatform",
+//    ":lyricist-processor",
+//    ":lyricist-processor-xml",
+//
+//    ":sample",
+//    ":sample-xml",
+//    ":sample-multi-module",
+//    ":sample-multiplatform",
+//    "lyricist-compose",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
