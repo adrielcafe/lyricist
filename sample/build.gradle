@@ -16,8 +16,8 @@ dependencies {
     implementation(project(":sample-multi-module"))
     implementation(project(":sample-xml"))
 
-    implementation(project(":lyricist"))
-    ksp(project(":lyricist-processor"))
+    implementation(project(":lyricist-compose"))
+    ksp(project(":lyricist-processor-compose"))
 
     implementation libs.appCompat
     implementation libs.compose.activity
