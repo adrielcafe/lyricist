@@ -10,14 +10,12 @@ dependencyResolutionManagement {
 include(
     ":lyricist-compose",
     ":lyricist-core",
-//    ":lyricist-processor",
-//    ":lyricist-processor-xml",
-//
-//    ":sample",
-//    ":sample-xml",
-//    ":sample-multi-module",
-//    ":sample-multiplatform",
-//    "lyricist-compose",
+    ":lyricist-processor-compose",
+    ":lyricist-processor-xml",
+    ":sample",
+    ":sample-xml",
+    ":sample-multi-module",
+    ":sample-multiplatform",
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
