@@ -1,9 +1,11 @@
 package cafe.adriel.lyricist
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
+@Immutable
 public class Lyricist<T>(
     private val defaultLanguageTag: LanguageTag,
     private val translations: Map<LanguageTag, T>
