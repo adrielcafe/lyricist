@@ -167,6 +167,14 @@ ksp {
 }
 ```
 
+### Generating a `strings` helper property
+Instead of use `LocalStrings.current` to access your strings, you can simply call `strings`. Just provide the following (optional) argument to KSP in the module's `build.gradle`.
+```gradle
+ksp {
+    arg("lyricist.generateStringsProperty", "true")
+}
+```
+
 **Important:** Lyricist uses the System locale as default. It won't persist the current locale on storage, is outside its scope.
 
 ## Multi module settings

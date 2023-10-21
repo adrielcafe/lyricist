@@ -4,4 +4,5 @@ internal data class LyricistConfig(
     val packageName: String,
     val moduleName: String,
     val internalVisibility: Boolean,
+    val generateStringsProperty: Boolean
 )

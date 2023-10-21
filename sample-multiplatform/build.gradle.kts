@@ -109,6 +109,7 @@ android {
 
 ksp {
     arg("lyricist.internalVisibility", "true")
+    arg("lyricist.generateStringsProperty", "true")
 }
 
 compose.desktop {

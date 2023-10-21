@@ -45,6 +45,16 @@ internal class LyricistSymbolProcessor(
 
         val visibility = if (config.internalVisibility) "internal" else "public"
 
+        val stringsProperty = if (config.generateStringsProperty) {
+            """
+            |$visibility val strings: $fileName
+            |    @Composable
+            |    get() = Local$fileName.current
+            """.trimMargin()
+        } else {
+            ""
+        }
+
         val defaultLanguageTag = roundDeclaration
             .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
             ?.let { "\"$it\"" }
@@ -97,6 +107,8 @@ internal class LyricistSymbolProcessor(
                 |
                 |$visibility val Local$fileName: ProvidableCompositionLocal<$stringsClassOutput> = 
                 |    compositionLocalOf { $defaultStringsOutput }
+                |
+                |$stringsProperty
                 |
                 |@Composable
                 |$visibility fun remember$fileName(

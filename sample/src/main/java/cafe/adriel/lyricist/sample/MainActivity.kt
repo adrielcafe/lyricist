@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.lyricist.LocalXmlStrings
 import cafe.adriel.lyricist.Lyricist
 import cafe.adriel.lyricist.ProvideStrings
@@ -32,6 +31,7 @@ import cafe.adriel.lyricist.rememberStrings
 import cafe.adriel.lyricist.rememberXmlStrings
 import cafe.adriel.lyricist.sample.multimodule.strings.MultiModuleStrings
 import cafe.adriel.lyricist.sample.strings.Strings
+import cafe.adriel.lyricist.strings
 
 class MainActivity : ComponentActivity() {
 
@@ -101,22 +101,22 @@ class MainActivity : ComponentActivity() {
             )
 
             // Simple simple
-            Text(text = LocalStrings.current.simple)
+            Text(text = strings.simple)
 
             // Annotated string
-            Text(text = LocalStrings.current.annotated)
+            Text(text = strings.annotated)
 
             // Parameter string
-            Text(text = LocalStrings.current.parameter(lyricist.languageTag))
+            Text(text = strings.parameter(lyricist.languageTag))
 
             // Plural string
-            Text(text = LocalStrings.current.plural(0))
-            Text(text = LocalStrings.current.plural(1))
-            Text(text = LocalStrings.current.plural(5))
-            Text(text = LocalStrings.current.plural(20))
+            Text(text = strings.plural(0))
+            Text(text = strings.plural(1))
+            Text(text = strings.plural(5))
+            Text(text = strings.plural(20))
 
             // List string
-            Text(text = LocalStrings.current.list.joinToString())
+            Text(text = strings.list.joinToString())
         }
     }
 
