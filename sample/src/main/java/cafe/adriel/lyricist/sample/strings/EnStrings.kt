@@ -23,11 +23,12 @@ internal val EnStrings = Strings(
 
     plural = { count ->
         val value = when (count) {
-            1, 2 -> "few"
-            in 3..10 -> "bunch of"
-            else -> "lot of"
+            0 -> "no"
+            1, 2 -> "a few"
+            in 3..10 -> "a bunch of"
+            else -> "a lot of"
         }
-        "I have a $value apples"
+        "I have $value apples"
     },
 
     list = listOf("Avocado", "Pineapple", "Plum")

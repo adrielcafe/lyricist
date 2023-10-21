@@ -23,11 +23,12 @@ internal val PtStrings = Strings(
 
     plural = { count ->
         val value = when (count) {
-            1, 2 -> "poucas"
-            in 3..10 -> "algumas"
-            else -> "muitas"
+            0 -> "não tenho"
+            1, 2 -> "tenho poucas"
+            in 3..10 -> "tenho algumas"
+            else -> "tenho muitas"
         }
-        "Eu tenho $value maças"
+        "Eu $value maças"
     },
 
     list = listOf("Abacate", "Abacaxi", "Ameixa")

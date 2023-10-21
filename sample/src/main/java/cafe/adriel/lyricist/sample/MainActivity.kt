@@ -110,6 +110,7 @@ class MainActivity : ComponentActivity() {
             Text(text = LocalStrings.current.parameter(lyricist.languageTag))
 
             // Plural string
+            Text(text = LocalStrings.current.plural(0))
             Text(text = LocalStrings.current.plural(1))
             Text(text = LocalStrings.current.plural(5))
             Text(text = LocalStrings.current.plural(20))
