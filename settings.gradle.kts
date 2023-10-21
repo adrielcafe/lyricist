@@ -8,11 +8,10 @@ dependencyResolutionManagement {
 }
 
 include(
-    ":lyricist",
+    ":lyricist-compose",
     ":lyricist-core",
-    ":lyricist-processor",
+    ":lyricist-processor-compose",
     ":lyricist-processor-xml",
-
     ":sample",
     ":sample-xml",
     ":sample-multi-module",

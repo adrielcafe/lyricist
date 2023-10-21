@@ -64,7 +64,7 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.runtime)
 
-                implementation(project(":lyricist"))
+                implementation(project(":lyricist-compose"))
             }
         }
 
@@ -85,7 +85,7 @@ kotlin {
 
 
 dependencies {
-    add("kspCommonMainMetadata", project(":lyricist-processor"))
+    add("kspCommonMainMetadata", project(":lyricist-processor-compose"))
 }
 
 // workaround for KSP only in Common Main.
