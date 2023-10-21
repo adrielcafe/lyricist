@@ -1,6 +1,7 @@
 <resources>
     <string name="simple">Olá "mundo"</string>
     <string name="params">Parâmetros: %1$s, %2$d, %s, %d</string>
+    <string name="replacement">@string/simple denovo</string>
 
     <string-array name="array">
         <item>Abacate</item>
