@@ -4,4 +4,8 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
+android {
+    namespace = "cafe.adriel.lyricist.core"
+}
+
 kotlinMultiplatform()

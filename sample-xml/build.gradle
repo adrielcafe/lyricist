@@ -2,6 +2,10 @@ apply plugin: "com.android.library"
 apply plugin: "com.google.devtools.ksp"
 apply from: "../android-module.gradle"
 
+android {
+    namespace "cafe.adriel.lyricist.sample.xml"
+}
+
 ksp {
     arg("lyricist.xml.moduleName", "xml")
     arg("lyricist.xml.defaultLanguageTag", "en")

@@ -3,9 +3,7 @@ apply plugin: "com.google.devtools.ksp"
 apply from: "../android-module.gradle"
 
 android {
-    defaultConfig {
-        applicationId "cafe.adriel.lyricist.sample"
-    }
+    namespace "cafe.adriel.lyricist.sample"
 }
 
 ksp {

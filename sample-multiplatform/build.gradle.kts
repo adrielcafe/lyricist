@@ -1,4 +1,4 @@
-import com.google.devtools.ksp.gradle.KspTask
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
@@ -29,7 +29,10 @@ kotlin {
             executable {
                 entryPoint = "main"
                 freeCompilerArgs += listOf(
-                    "-linker-option", "-framework", "-linker-option", "Metal"
+                    "-linker-option",
+                    "-framework",
+                    "-linker-option",
+                    "Metal"
                 )
             }
         }
@@ -57,7 +60,6 @@ kotlin {
         binaries.executable()
     }
 
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -83,7 +85,6 @@ kotlin {
     }
 }
 
-
 dependencies {
     add("kspCommonMainMetadata", project(":lyricist-processor-compose"))
 }
@@ -91,7 +92,7 @@ dependencies {
 // workaround for KSP only in Common Main.
 // https://github.com/google/ksp/issues/567
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
-    if(name != "kspCommonMainKotlinMetadata") {
+    if (name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
     }
 }
