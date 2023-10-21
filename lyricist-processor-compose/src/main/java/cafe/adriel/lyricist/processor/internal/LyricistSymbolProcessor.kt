@@ -95,7 +95,8 @@ internal class LyricistSymbolProcessor(
                 |$translationMappingOutput
                 |)
                 |
-                |$visibility val Local$fileName: ProvidableCompositionLocal<$stringsClassOutput> = compositionLocalOf { $defaultStringsOutput }
+                |$visibility val Local$fileName: ProvidableCompositionLocal<$stringsClassOutput> = 
+                |    compositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |$visibility fun remember$fileName(

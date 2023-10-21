@@ -32,8 +32,11 @@ internal class LyricistXmlSymbolProcessor(
             .groupBy { file ->
                 val languageTag = file.languageTag
 
-                if (languageTag.isBlank()) config.defaultLanguageTag
-                else languageTag
+                if (languageTag.isBlank()) {
+                    config.defaultLanguageTag
+                } else {
+                    languageTag
+                }
             }
             .mapValues { (_, files) ->
                 files.map { it.getXmlStrings() }
@@ -70,15 +73,18 @@ internal class LyricistXmlSymbolProcessor(
                 val type = when (value) {
                     is StringResource.PlainString -> {
                         val params = value.value.params
-                        if (params.isEmpty()) "String"
-                        else "(${params.joinToString()}) -> String"
+                        if (params.isEmpty()) {
+                            "String"
+                        } else {
+                            "(${params.joinToString()}) -> String"
+                        }
                     }
                     is StringResource.StringArray -> "List<String>"
                     is StringResource.Plurals -> "(quantity: Int) -> String"
                 }
                 "val ${key.toLowerCamelCase()}: $type"
             }
-            .joinToString(",\n") { "$INDENTATION$it" }
+            .joinToString("\n") { "$INDENTATION$it" }
 
         val translationMappingOutput = languageTags
             .map { languageTag ->
@@ -112,9 +118,9 @@ internal class LyricistXmlSymbolProcessor(
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
                 |
-                |public data class $fileName(
+                |public interface $fileName {
                 |$values
-                |)
+                |}
                 |
                 |public object Locales {
                 |$localesOutput
@@ -124,7 +130,8 @@ internal class LyricistXmlSymbolProcessor(
                 |$translationMappingOutput
                 |)
                 |
-                |public val Local$fileName: ProvidableCompositionLocal<$fileName> = staticCompositionLocalOf { $defaultStringsOutput }
+                |public val Local$fileName: ProvidableCompositionLocal<$fileName> = 
+                |    staticCompositionLocalOf { $defaultStringsOutput }
                 |
                 |@Composable
                 |public fun remember$fileName(
@@ -151,6 +158,9 @@ internal class LyricistXmlSymbolProcessor(
             .map { (key, value) ->
                 val resourceValue = when (value) {
                     is StringResource.PlainString -> {
+                        val typedParams = value.value.params
+                            .mapIndexed { i, type -> "p$i: $type" }
+                            .joinToString()
                         val params = value.value.params
                             .mapIndexed { i, _ -> "p$i" }
                             .joinToString()
@@ -158,7 +168,7 @@ internal class LyricistXmlSymbolProcessor(
                         if (params.isEmpty()) {
                             "\"${value.value.normalized}\""
                         } else {
-                            """{ $params -> 
+                            """{ $typedParams -> 
                             |        "${value.value.normalized}"
                             |            .format($params)
                             |    }
@@ -173,16 +183,16 @@ internal class LyricistXmlSymbolProcessor(
                         """.trimMargin()
 
                     is StringResource.Plurals ->
-                        """{ quantity ->
+                        """{ quantity: Int ->
                         |        when (quantity) {
                         |${value.value.formatted}
                         |        }.format(quantity)
                         |    }
                         """.trimMargin()
                 }
-                "${key.toLowerCamelCase()} = $resourceValue"
+                "override val ${key.toLowerCamelCase()} = $resourceValue"
             }
-            .joinToString(",\n\n") { "$INDENTATION$it" }
+            .joinToString("\n\n") { "$INDENTATION$it" }
 
         codeGenerator.createNewFile(
             dependencies = Dependencies(aggregating = true),
@@ -193,9 +203,9 @@ internal class LyricistXmlSymbolProcessor(
                 """
                 |package ${config.packageName}
                 |
-                |val $propertyName = $fileName(
-                |$values
-                |)
+                |val $propertyName = object : $fileName {
+                |  $values
+                |}
                 """.trimMargin().toByteArray()
             )
         }

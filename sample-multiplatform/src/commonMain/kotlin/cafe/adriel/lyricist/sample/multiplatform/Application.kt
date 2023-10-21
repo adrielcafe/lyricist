@@ -12,10 +12,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.lyricist.rememberStrings
 import cafe.adriel.lyricist.LocalStrings
 import cafe.adriel.lyricist.Lyricist
 import cafe.adriel.lyricist.ProvideStrings
+import cafe.adriel.lyricist.rememberStrings
 import cafe.adriel.lyricist.sample.multiplatform.strings.Strings
 
 @Composable

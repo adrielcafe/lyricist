@@ -106,6 +106,7 @@ private fun Konsumer.getPlurals(): ResourceNodes =
 
 private fun Konsumer.textWithReplacements(attr: String): String = text()
     .also { text ->
-        if (ReplacementExpr.containsMatchIn(text))
+        if (ReplacementExpr.containsMatchIn(text)) {
             replacements.add(attr)
+        }
     }
