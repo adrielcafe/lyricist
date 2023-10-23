@@ -16,6 +16,7 @@ Lyricist tries to make working with strings as powerful as building UIs with Com
 - [x] [Simple API](#usage) to handle locale changes and provide the current strings
 - [x] [Multi module support](#multi-module-settings)
 - [x] [Easy migration](#migrating-from-stringsxml) from `strings.xml`
+- [x] [Extensible](#extending-lyricist): supports Compose Multiplatform out of the box but can be integrated on any UI Toolkit
 - [x] Code generation with [KSP](https://github.com/google/ksp)
 
 #### Limitations
@@ -99,36 +100,13 @@ ProvideStrings {
 }
 ```
 
-<details><summary>Writing the code for yourself</summary>
-
-Don't want to enable KSP to generate the code for you? No problem! Follow the steps below to integrate with Lyricist manually.
-
-First, map each supported language tag to their corresponding instances.
+Optionally, you can specify the current and default (used as fallback) languages.
 ```kotlin
-val strings = mapOf(
-    Locales.EN to EnStrings,
-    Locales.PT to PtStrings,
-    Locales.ES to EsStrings,
-    Locales.RU to RuStrings
+val lyricist = rememberStrings(
+    defaultLanguageTag = "es-US", // Default value is the one annotated with @LyricistStrings(default = true)
+    currentLanguageTag = getCurrentLanguageTagFromLocalStorage(),
 )
 ```
-
-Next, create your `LocalStrings` and choose one translation as default.
-```kotlin
-val LocalStrings = staticCompositionLocalOf { EnStrings }
-```
-
-Finally, use the same functions, `rememberStrings()` and `ProvideStrings()`, to make your `LocalStrings` accessible down the tree. But this time you need to provide your `strings` and `LocalStrings` manually.
-```kotlin
-val lyricist = rememberStrings(strings)
-
-ProvideStrings(lyricist, LocalStrings) {
-    // Content
-}
-```
-
----
-</details>
 
 Now you can use `LocalStrings` to retrieve the current strings.
 ```kotlin
@@ -154,10 +132,16 @@ Text(text = strings.list.joinToString())
 // > Avocado, Pineapple, Plum
 ```
 
-Use the Lyricist instance provided by `rememberStrings()` to change the current locale. This will trigger a [recomposition](https://developer.android.com/jetpack/compose/mental-model#recomposition) that will update the strings wherever they are being used.
+Use the Lyricist instance provided by `rememberStrings()` to change the current locale. This will trigger a [recomposition](https://developer.android.com/jetpack/compose/mental-model#recomposition) that will update the entire content.
 ```kotlin
 lyricist.languageTag = Locales.PT
 ```
+
+**Important**
+
+Lyricist uses the System locale as current language (on Compose it uses `Locale.current`). If your app has a mechanism to change the language in-app please set this value on `rememberStrings(currentLanguageTag = CURRENT_VALUE_HERE)`.
+
+If you change the current language at runtime Lyricist won't persist the value on a local storage by itself, this should be done by you. You can save the current language tag on shared preferences, a local database or even through a remote API.
 
 ### Controlling the visibility
 To control the visibility (`public` or `internal`) of the generated code, provide the following (optional) argument to KSP in the module's `build.gradle`.
@@ -174,8 +158,14 @@ ksp {
     arg("lyricist.generateStringsProperty", "true")
 }
 ```
+After a successfully build you can refactor your code as below. 
+```kotlin
+// Before
+Text(text = LocalStrings.current.hello)
 
-**Important:** Lyricist uses the System locale as default. It won't persist the current locale on storage, is outside its scope.
+// After
+Text(text = strings.hello)
+```
 
 ## Multi module settings
 
@@ -217,6 +207,73 @@ lyricist.languageTag = Locales.PT
 ```
 
 You can easily migrate from `strings.xml` to Lyricist just by copying the generated files to your project. That way, you can finally say goodbye to `strings.xml`. 
+
+## Extending Lyricist
+
+<details><summary>Writing the generated code from KSP manually</summary>
+
+Don't want to enable KSP to generate the code for you? No problem! Follow the steps below to integrate with Lyricist manually.
+
+1. Map each supported language tag to their corresponding instances.
+```kotlin
+val strings = mapOf(
+    Locales.EN to EnStrings,
+    Locales.PT to PtStrings,
+    Locales.ES to EsStrings,
+    Locales.RU to RuStrings
+)
+```
+
+2. Create your `LocalStrings` and choose one translation as default.
+```kotlin
+val LocalStrings = staticCompositionLocalOf { EnStrings }
+```
+
+3. Use the same functions, `rememberStrings()` and `ProvideStrings()`, to make your `LocalStrings` accessible down the tree. But this time you need to provide your `strings` and `LocalStrings` manually.
+```kotlin
+val lyricist = rememberStrings(strings)
+
+ProvideStrings(lyricist, LocalStrings) {
+    // Content
+}
+```
+</details>
+
+<details><summary>Supporting other UI Toolkits</summary>
+
+At the moment Lyricist only supports Jetpack Compose and Compose Multiplatform out of the box. If you need to use Lyricist with other UI Toolkit (Android Views, SwiftUI, Swing, GTK...) follow the instructions bellow.
+
+1. Map each supported language tag to their corresponding instances
+```kotlin
+val translations = mapOf(
+    Locales.EN to EnStrings,
+    Locales.PT to PtStrings,
+    Locales.ES to EsStrings,
+    Locales.RU to RuStrings
+)
+```
+
+2. Create an instance of Lyricist, can be a project-wide singleton or a local instance per module
+```kotlin
+val lyricist = Lyricist(defaultLanguageTag, translations)
+```
+
+3. Collect Lyricist state and notify the UI to update whenever it changes
+```kotlin
+lyricist.state.collect { (languageTag, strings) ->
+    refreshUi(strings)
+}
+
+// Example for Compose
+val state by lyricist.state.collectAsState()
+
+CompositionLocalProvider(
+    LocalStrings provides state.strings
+) {
+    // Content
+}
+```
+</details>
 
 ## Troubleshooting
 
@@ -260,6 +317,17 @@ ksp("cafe.adriel.lyricist:lyricist-processor:${latest-version}")
 ksp("cafe.adriel.lyricist:lyricist-processor-xml:${latest-version}")
 ```
 
+#### Version Catalog
+```toml
+[versions]
+lyricist = {latest-version}
+
+[libraries]
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
+lyricist-processor = { module = "cafe.adriel.lyricist:lyricist-processor", version.ref = "lyricist" }
+lyricist-processorXml = { module = "cafe.adriel.lyricist:lyricist-processor-xml", version.ref = "lyricist" }
+```
+
 #### Multiplatform setup
 
 Doing code generation only at `commonMain`. Currently workaround, for more information see [KSP Issue 567](https://github.com/google/ksp/issues/567)
@@ -277,17 +345,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
 kotlin.sourceSets.commonMain {
     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 }
-```
-
-#### Version Catalog
-```toml
-[versions]
-lyricist = {latest-version}
-
-[libraries]
-lyricist-library = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist" }
-lyricist-processor = { module = "cafe.adriel.lyricist:lyricist-processor", version.ref = "lyricist" }
-lyricist-processorXml = { module = "cafe.adriel.lyricist:lyricist-processor-xml", version.ref = "lyricist" }
 ```
 
 Current version: ![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&metadataUrl=https://s01.oss.sonatype.org/service/local/repo_groups/public/content/cafe/adriel/lyricist/lyricist/maven-metadata.xml)

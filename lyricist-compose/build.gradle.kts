@@ -16,6 +16,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":lyricist-core"))
+                implementation(libs.coroutines)
                 compileOnly(compose.runtime)
                 compileOnly(compose.ui)
             }

@@ -135,9 +135,10 @@ internal class LyricistXmlSymbolProcessor(
                 |
                 |@Composable
                 |public fun remember$fileName(
-                |    languageTag: LanguageTag = Locale.current.toLanguageTag()
+                |    defaultLanguageTag: LanguageTag = "${config.defaultLanguageTag}",
+                |    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
                 |): Lyricist<$fileName> =
-                |    rememberStrings($stringsName, languageTag)
+                |    rememberStrings($stringsName, defaultLanguageTag, currentLanguageTag)
                 |
                 |@Composable
                 |public fun Provide$fileName(

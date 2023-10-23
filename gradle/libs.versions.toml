@@ -5,6 +5,7 @@ plugin-maven = "0.22.0"
 
 kotlin = "1.9.10"
 
+coroutines = "1.7.3"
 ksp = "1.9.10-1.0.13"
 caseFormat = "0.2.0"
 konsumeXml = "1.0"
@@ -25,6 +26,7 @@ plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 plugin-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeMultiplatform" }
 
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 caseFormat = { module = "com.fleshgrinder.kotlin:case-format", version.ref = "caseFormat" }
 konsumeXml = { module = "com.gitlab.mvysny.konsume-xml:konsume-xml", version.ref = "konsumeXml" }
@@ -38,4 +40,11 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 test-junit = { module = "androidx.test.ext:junit-ktx", version.ref = "test-junit" }
 
 [bundles]
-plugins = ["plugin-android", "plugin-ktlint", "plugin-maven", "plugin-kotlin", "plugin-ksp", "plugin-compose-multiplatform"]
+plugins = [
+    "plugin-android",
+    "plugin-ktlint",
+    "plugin-maven",
+    "plugin-kotlin",
+    "plugin-ksp",
+    "plugin-compose-multiplatform",
+]

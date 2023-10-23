@@ -111,4 +111,4 @@ private fun KotlinJvmOptions.configureKotlinJvmOptions(
 
 private fun Project.findAndroidExtension(): BaseExtension = extensions.findByType<LibraryExtension>()
     ?: extensions.findByType<com.android.build.gradle.AppExtension>()
-    ?: error("Could not found Android application or library plugin applied on module $name")
+    ?: error("Could not find Android application or library plugin applied on module $name")
