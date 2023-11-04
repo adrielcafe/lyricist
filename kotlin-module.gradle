@@ -2,6 +2,7 @@ apply plugin: 'kotlin'
 
 compileKotlin {
     kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
         freeCompilerArgs += '-Xexplicit-api=strict'
     }
 }
