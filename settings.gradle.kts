@@ -11,6 +11,7 @@ include(
     ":lyricist-core",
     ":lyricist-processor-compose",
     ":lyricist-processor-xml",
+    ":lyricist-processor-properties",
     ":sample",
     ":sample-xml",
     ":sample-multi-module",
