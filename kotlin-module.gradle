@@ -2,7 +2,17 @@ apply plugin: 'kotlin'
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs += '-Xexplicit-api=strict'
+    }
+}
+
+kotlin {
+    jvmToolchain(8)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
     }
 }
