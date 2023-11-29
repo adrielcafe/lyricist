@@ -16,6 +16,7 @@ include(
     ":sample-xml",
     ":sample-multi-module",
     ":sample-multiplatform",
+    ":sample-properties",
 )
 
 // There's an issue when a module has the same name of the project
