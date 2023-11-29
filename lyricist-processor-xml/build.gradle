@@ -4,6 +4,7 @@ dependencies {
     implementation libs.ksp
     implementation libs.caseFormat
     implementation libs.konsumeXml
+    api project(":lyricist-processor")
 }
 
 apply plugin: "com.vanniktech.maven.publish"
