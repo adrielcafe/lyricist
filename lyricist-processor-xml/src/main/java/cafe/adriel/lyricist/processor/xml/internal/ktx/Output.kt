@@ -25,7 +25,7 @@ internal val String.normalized: String
 
 internal val String.params: List<String>
     get() = REGEX_STRING_PARAM.findAll(normalized, 0)
-        .map { it.value }
+        .map(MatchResult::value)
         .map { param -> if (param == "%d") "Int" else "String" }
         .toList()
 

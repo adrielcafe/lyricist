@@ -30,16 +30,10 @@ internal class LyricistXmlSymbolProcessor(
             .walk()
             .filterXmlStringFiles()
             .groupBy { file ->
-                val languageTag = file.languageTag
-
-                if (languageTag.isBlank()) {
-                    config.defaultLanguageTag
-                } else {
-                    languageTag
-                }
+                file.languageTag.ifBlank { config.defaultLanguageTag }
             }
             .mapValues { (_, files) ->
-                files.map { it.getXmlStrings() }
+                files.map(File::getXmlStrings)
                     .flatten()
                     .toMap()
             }
@@ -50,7 +44,6 @@ internal class LyricistXmlSymbolProcessor(
         if (strings.isEmpty()) return
 
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
-
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
         strings[config.defaultLanguageTag]
@@ -162,8 +155,7 @@ internal class LyricistXmlSymbolProcessor(
                         val typedParams = value.value.params
                             .mapIndexed { i, type -> "p$i: $type" }
                             .joinToString()
-                        val params = value.value.params
-                            .mapIndexed { i, _ -> "p$i" }
+                        val params = List(value.value.params.size) { i -> "p$i" }
                             .joinToString()
 
                         if (params.isEmpty()) {
@@ -171,7 +163,6 @@ internal class LyricistXmlSymbolProcessor(
                         } else {
                             """{ $typedParams -> 
                             |        "${value.value.normalized}"
-                            |            .format($params)
                             |    }
                             """.trimMargin()
                         }
@@ -187,7 +178,7 @@ internal class LyricistXmlSymbolProcessor(
                         """{ quantity: Int ->
                         |        when (quantity) {
                         |${value.value.formatted}
-                        |        }.format(quantity)
+                        |        }
                         |    }
                         """.trimMargin()
                 }
