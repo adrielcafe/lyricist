@@ -13,7 +13,7 @@ import cafe.adriel.lyricist.processor.internal.ProcessorOptions.RESOURCES_PATH
 import cafe.adriel.lyricist.processor.internal.ProcessorOptions.SYMBOL_PROCESSOR_PATH
 import cafe.adriel.lyricist.processor.internal.ProcessorOptions.XML_DEFAULT_LANGUAGE_TAG
 import cafe.adriel.lyricist.processor.internal.ProcessorOptions.XML_RESOURCES_PATH
-import cafe.adriel.lyricist.processor.internal.ProcessorOptions.availableProcessors
+import cafe.adriel.lyricist.processor.internal.ProcessorOptions.allKnownProcessors
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
@@ -65,12 +65,11 @@ internal class LyricistSymbolProcessorProvider : SymbolProcessorProvider {
 
     private fun SymbolProcessorEnvironment.findProcessors(config: LyricistConfig): List<SymbolProcessor> {
         val foundProcessors = mutableListOf<SymbolProcessor>()
-        availableProcessors.forEach { processorName ->
+        allKnownProcessors.forEach { processorName ->
             val className = SYMBOL_PROCESSOR_PATH.format(processorName.replaceFirstChar(Char::uppercaseChar))
             val processorClass = try {
                 Class.forName(className)
             } catch (_: ClassNotFoundException) {
-                logger.warn("Processor $className not found")
                 return@forEach
             }
 
@@ -80,7 +79,7 @@ internal class LyricistSymbolProcessorProvider : SymbolProcessorProvider {
             val symbolProcessor = constructor.call(config, codeGenerator, logger) as SymbolProcessor
 
             foundProcessors.add(symbolProcessor)
-            logger.warn("Processor $symbolProcessor loaded")
+            logger.info("$className loaded")
         }
 
         return foundProcessors.toList()

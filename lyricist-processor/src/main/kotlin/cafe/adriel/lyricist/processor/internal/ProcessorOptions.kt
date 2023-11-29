@@ -21,5 +21,5 @@ public object ProcessorOptions {
     public const val XML_RESOURCES_PATH: String = "lyricist.xml.resourcesPath"
     public const val XML_DEFAULT_LANGUAGE_TAG: String = "lyricist.xml.defaultLanguageTag"
 
-    public val availableProcessors: List<String> = listOf("xml", "compose", "properties")
+    public val allKnownProcessors: List<String> = listOf("xml", "compose", "properties")
 }

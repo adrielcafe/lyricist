@@ -19,3 +19,7 @@ dependencies {
     implementation libs.compose.runtime
     implementation libs.compose.ui.text
 }
+
+kotlin {
+    jvmToolchain(8)
+}

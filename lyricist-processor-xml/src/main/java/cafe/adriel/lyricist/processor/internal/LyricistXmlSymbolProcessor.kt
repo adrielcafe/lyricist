@@ -1,14 +1,15 @@
-package cafe.adriel.lyricist.processor.xml.internal
+package cafe.adriel.lyricist.processor.internal
 
-import cafe.adriel.lyricist.processor.internal.LyricistConfig
-import cafe.adriel.lyricist.processor.internal.resourcesPathOrThrow
-import cafe.adriel.lyricist.processor.xml.internal.ktx.INDENTATION
-import cafe.adriel.lyricist.processor.xml.internal.ktx.filterXmlStringFiles
-import cafe.adriel.lyricist.processor.xml.internal.ktx.formatted
-import cafe.adriel.lyricist.processor.xml.internal.ktx.getXmlStrings
-import cafe.adriel.lyricist.processor.xml.internal.ktx.languageTag
-import cafe.adriel.lyricist.processor.xml.internal.ktx.normalized
-import cafe.adriel.lyricist.processor.xml.internal.ktx.params
+import cafe.adriel.lyricist.processor.internal.xml.LanguageTag
+import cafe.adriel.lyricist.processor.internal.xml.StringResource
+import cafe.adriel.lyricist.processor.internal.xml.StringResources
+import cafe.adriel.lyricist.processor.internal.xml.ktx.INDENTATION
+import cafe.adriel.lyricist.processor.internal.xml.ktx.filterXmlStringFiles
+import cafe.adriel.lyricist.processor.internal.xml.ktx.formatted
+import cafe.adriel.lyricist.processor.internal.xml.ktx.getXmlStrings
+import cafe.adriel.lyricist.processor.internal.xml.ktx.languageTag
+import cafe.adriel.lyricist.processor.internal.xml.ktx.normalized
+import cafe.adriel.lyricist.processor.internal.xml.ktx.params
 import com.fleshgrinder.extensions.kotlin.toLowerCamelCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.devtools.ksp.processing.CodeGenerator
