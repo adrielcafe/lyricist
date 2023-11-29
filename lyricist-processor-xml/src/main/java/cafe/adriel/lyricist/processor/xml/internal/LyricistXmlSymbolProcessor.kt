@@ -205,7 +205,7 @@ internal class LyricistXmlSymbolProcessor(
                 |package ${config.packageName}
                 |
                 |val $propertyName = object : $fileName {
-                |  $values
+                |$values
                 |}
                 """.trimMargin().toByteArray()
             )
