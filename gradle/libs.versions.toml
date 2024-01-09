@@ -3,18 +3,18 @@ plugin-android = "8.1.2"
 plugin-ktlint = "11.6.1"
 plugin-maven = "0.22.0"
 
-kotlin = "1.9.10"
+kotlin = "1.8.20"
 
 coroutines = "1.7.3"
-ksp = "1.9.10-1.0.13"
+ksp = "1.8.20-1.0.10"
 caseFormat = "0.2.0"
 konsumeXml = "1.0"
 
-appCompat = "1.6.1"
-compose = "1.5.4"
-composeCompiler = "1.5.3"
-composeActivity = "1.8.0"
-composeMultiplatform = "1.5.3"
+appCompat = "1.5.1"
+compose = "1.4.3"
+composeCompiler = "1.4.6"
+composeActivity = "1.7.2"
+composeMultiplatform = "1.4.1"
 
 test-junit = "1.1.5"
 

@@ -8,10 +8,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.LibraryExtension
 
 private fun BaseExtension.android() {
-    compileSdkVersion(34)
+    compileSdkVersion(33)
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
     }
@@ -27,7 +27,7 @@ fun Project.kotlinMultiplatform(
                 explicitApi()
             }
 
-            androidTarget {
+            android {
                 if (project.plugins.hasPlugin("com.vanniktech.maven.publish")) {
                     publishLibraryVariants("release")
                 }
