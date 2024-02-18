@@ -124,6 +124,10 @@ internal class LyricistSymbolProcessor(
                 |) {
                 |    ProvideStrings(lyricist, Local$fileName, content)
                 |}
+                |
+                |$visibility fun getLocale$fileName(locale: Locale = Locale.current): $stringsClassOutput {
+                |    return $stringsName[locale.toLanguageTag()] ?: $defaultStringsOutput
+                |}                
                 """.trimMargin().toByteArray()
             )
         }
