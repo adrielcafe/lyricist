@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.android.build.gradle.LibraryExtension
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 private fun BaseExtension.android() {
     compileSdkVersion(34)
@@ -35,6 +36,10 @@ fun Project.kotlinMultiplatform(
             jvm("desktop")
 
             js(IR) {
+                browser()
+            }
+            @OptIn(ExperimentalWasmDsl::class)
+            wasmJs {
                 browser()
             }
             macosX64()

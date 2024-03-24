@@ -1,20 +1,20 @@
 [versions]
-plugin-android = "8.1.2"
-plugin-ktlint = "11.6.1"
-plugin-maven = "0.22.0"
+plugin-android = "8.2.2"
+plugin-ktlint = "12.1.0"
+plugin-maven = "0.28.0"
 
-kotlin = "1.9.10"
+kotlin = "1.9.22"
 
-coroutines = "1.7.3"
-ksp = "1.9.10-1.0.13"
+coroutines = "1.8.0"
+ksp = "1.9.22-1.0.17"
 caseFormat = "0.2.0"
-konsumeXml = "1.0"
+konsumeXml = "1.1"
 
 appCompat = "1.6.1"
-compose = "1.5.4"
-composeCompiler = "1.5.3"
-composeActivity = "1.8.0"
-composeMultiplatform = "1.5.3"
+compose = "1.6.4"
+composeCompiler = "1.5.11"
+composeActivity = "1.8.2"
+composeMultiplatform = "1.6.1"
 
 test-junit = "1.1.5"
 

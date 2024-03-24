@@ -1,16 +1,13 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.CanvasBasedWindow
 import cafe.adriel.lyricist.sample.multiplatform.SampleApplication
-import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    onWasmReady {
-        CanvasBasedWindow(
-            title = "Voyager Sample",
-            canvasElementId = "ComposeTarget"
-        ) {
-            SampleApplication()
-        }
+    CanvasBasedWindow(
+        title = "Voyager Sample",
+        canvasElementId = "ComposeTarget"
+    ) {
+        SampleApplication()
     }
 }
