@@ -20,7 +20,6 @@ private fun BaseExtension.android() {
 
 fun Project.kotlinMultiplatform(
     withKotlinExplicitMode: Boolean = true,
-    iosPrefixName: String = "ios", // only used in ios sample
 ) {
     plugins.withType<org.jetbrains.kotlin.gradle.plugin.KotlinBasePluginWrapper> {
         extensions.configure<KotlinMultiplatformExtension> {
@@ -44,8 +43,8 @@ fun Project.kotlinMultiplatform(
             }
             macosX64()
             macosArm64()
-            ios(iosPrefixName)
-            iosSimulatorArm64("${iosPrefixName}SimulatorArm64")
+            ios()
+            iosSimulatorArm64()
 
             sourceSets {
                 /* Source sets structure
@@ -86,10 +85,10 @@ fun Project.kotlinMultiplatform(
                 val macosArm64Main by getting {
                     dependsOn(macosMain)
                 }
-                val iosMain = getByName(iosPrefixName + "Main").apply {
+                val iosMain by getting {
                     dependsOn(nativeMain)
                 }
-                val iosSimulatorArm64Main = getByName(iosPrefixName + "SimulatorArm64Main").apply {
+                val iosSimulatorArm64Main by getting {
                     dependsOn(iosMain)
                 }
             }
