@@ -1,9 +1,5 @@
 # multiplatform sample
 
-### Running iOS
-- IPhone: `./gradlew :sample-multiplatform:iosDeployIPhone8Debug`
-- IPad: `./gradlew :sample-multiplatform:iosDeployIPadDebug`
-
 ### Running MacOS Native app (Desktop using Kotlin Native)
 ```shell
 ./gradlew :sample-multiplatform:runNativeDebug
