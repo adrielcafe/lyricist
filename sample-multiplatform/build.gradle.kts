@@ -3,8 +3,9 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Dmg
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi
 import org.jetbrains.compose.desktop.application.tasks.AbstractNativeMacApplicationPackageTask
-import org.jetbrains.compose.experimental.dsl.IOSDevices
+// import org.jetbrains.compose.experimental.dsl.IOSDevices
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     kotlin("multiplatform")
@@ -56,6 +57,12 @@ kotlin {
     iosSimulatorArm64("uikitSimulatorArm64", uikitConfiguration)
 
     js(IR) {
+        browser()
+        binaries.executable()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
         browser()
         binaries.executable()
     }
@@ -154,17 +161,17 @@ afterEvaluate {
 }
 
 compose.experimental {
-    uikit.application {
-        bundleIdPrefix = "cafe.adriel.lyricist"
-        projectName = "MultiplatformSample"
-        deployConfigurations {
-            simulator("IPhone8") {
-                device = IOSDevices.IPHONE_8
-            }
-            simulator("IPad") {
-                device = IOSDevices.IPAD_MINI_6th_Gen
-            }
-        }
-    }
+//    uikit.application {
+//        bundleIdPrefix = "cafe.adriel.lyricist"
+//        projectName = "MultiplatformSample"
+//        /*deployConfigurations {
+//            simulator("IPhone8") {
+//                device = IOSDevices.IPHONE_8
+//            }
+//            simulator("IPad") {
+//                device = IOSDevices.IPAD_MINI_6th_Gen
+//            }
+//        }*/
+//    }
     web.application {}
 }
