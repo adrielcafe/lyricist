@@ -31,5 +31,7 @@ internal val EnStrings = Strings(
         "I have $value apples"
     },
 
-    list = listOf("Avocado", "Pineapple", "Plum")
+    list = listOf("Avocado", "Pineapple", "Plum"),
+
+    nonComposeAlert = "This is a sample toast",
 )

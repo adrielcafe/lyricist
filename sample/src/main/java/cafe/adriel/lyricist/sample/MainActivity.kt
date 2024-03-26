@@ -1,6 +1,7 @@
 package cafe.adriel.lyricist.sample
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import cafe.adriel.lyricist.XmlStrings
 import cafe.adriel.lyricist.custompackage.LocalMultiModuleStrings
 import cafe.adriel.lyricist.custompackage.ProvideMultiModuleStrings
 import cafe.adriel.lyricist.custompackage.rememberMultiModuleStrings
+import cafe.adriel.lyricist.getLocaleStrings
 import cafe.adriel.lyricist.rememberStrings
 import cafe.adriel.lyricist.rememberXmlStrings
 import cafe.adriel.lyricist.sample.multimodule.strings.MultiModuleStrings
@@ -70,7 +72,14 @@ class MainActivity : ComponentActivity() {
                             SampleXmlStrings()
                         }
                     }
+
+                    item {
+                        Row(modifier = Modifier.padding(vertical = 16.dp)) {
+                            ShowToastButton()
+                        }
+                    }
                 }
+
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
@@ -158,6 +167,23 @@ class MainActivity : ComponentActivity() {
             // List string
             Text(text = LocalXmlStrings.current.array.joinToString())
         }
+    }
+
+    @Composable
+    fun ShowToastButton(
+        modifier: Modifier = Modifier
+    ) {
+        Button(
+            onClick = {
+                showToast()
+            }, modifier = modifier
+        ) {
+            Text(text = "Show Toast")
+        }
+    }
+
+    private fun showToast() {
+        Toast.makeText(this, getLocaleStrings().nonComposeAlert, Toast.LENGTH_SHORT).show()
     }
 
     @Composable

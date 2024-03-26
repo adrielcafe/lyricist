@@ -31,5 +31,7 @@ internal val PtStrings = Strings(
         "Eu $value maças"
     },
 
-    list = listOf("Abacate", "Abacaxi", "Ameixa")
+    list = listOf("Abacate", "Abacaxi", "Ameixa"),
+
+    nonComposeAlert = "Este é um exemplo de brinde",
 )
