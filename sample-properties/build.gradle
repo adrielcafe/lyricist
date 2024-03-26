@@ -1,0 +1,6 @@
+apply plugin: "com.google.devtools.ksp"
+apply from: "../kotlin-module.gradle"
+
+dependencies {
+    ksp(project(":lyricist-processor-properties"))
+}
