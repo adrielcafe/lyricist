@@ -1,8 +1,8 @@
-package cafe.adriel.lyricist.processor.xml.internal.ktx
+package cafe.adriel.lyricist.processor.internal.xml.ktx
 
-import cafe.adriel.lyricist.processor.xml.internal.Quantity
-import cafe.adriel.lyricist.processor.xml.internal.ResourceName
-import cafe.adriel.lyricist.processor.xml.internal.StringResource
+import cafe.adriel.lyricist.processor.internal.xml.Quantity
+import cafe.adriel.lyricist.processor.internal.xml.ResourceName
+import cafe.adriel.lyricist.processor.internal.xml.StringResource
 import com.gitlab.mvysny.konsumexml.Konsumer
 import com.gitlab.mvysny.konsumexml.konsumeXml
 import java.io.File

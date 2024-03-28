@@ -13,7 +13,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSValueArgument
 import com.google.devtools.ksp.validate
 
-internal class LyricistSymbolProcessor(
+internal class LyricistComposeSymbolProcessor(
     private val config: LyricistConfig,
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger

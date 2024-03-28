@@ -1,4 +1,4 @@
-package cafe.adriel.lyricist.processor.xml.internal
+package cafe.adriel.lyricist.processor.internal.xml
 
 internal typealias StringResources = Map<ResourceName, StringResource>
 

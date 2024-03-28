@@ -1,12 +1,15 @@
-package cafe.adriel.lyricist.processor.xml.internal
+package cafe.adriel.lyricist.processor.internal
 
-import cafe.adriel.lyricist.processor.xml.internal.ktx.INDENTATION
-import cafe.adriel.lyricist.processor.xml.internal.ktx.filterXmlStringFiles
-import cafe.adriel.lyricist.processor.xml.internal.ktx.formatted
-import cafe.adriel.lyricist.processor.xml.internal.ktx.getXmlStrings
-import cafe.adriel.lyricist.processor.xml.internal.ktx.languageTag
-import cafe.adriel.lyricist.processor.xml.internal.ktx.normalized
-import cafe.adriel.lyricist.processor.xml.internal.ktx.params
+import cafe.adriel.lyricist.processor.internal.xml.LanguageTag
+import cafe.adriel.lyricist.processor.internal.xml.StringResource
+import cafe.adriel.lyricist.processor.internal.xml.StringResources
+import cafe.adriel.lyricist.processor.internal.xml.ktx.INDENTATION
+import cafe.adriel.lyricist.processor.internal.xml.ktx.filterXmlStringFiles
+import cafe.adriel.lyricist.processor.internal.xml.ktx.formatted
+import cafe.adriel.lyricist.processor.internal.xml.ktx.getXmlStrings
+import cafe.adriel.lyricist.processor.internal.xml.ktx.languageTag
+import cafe.adriel.lyricist.processor.internal.xml.ktx.normalized
+import cafe.adriel.lyricist.processor.internal.xml.ktx.params
 import com.fleshgrinder.extensions.kotlin.toLowerCamelCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.devtools.ksp.processing.CodeGenerator
@@ -18,7 +21,7 @@ import com.google.devtools.ksp.symbol.KSAnnotated
 import java.io.File
 
 internal class LyricistXmlSymbolProcessor(
-    private val config: LyricistXmlConfig,
+    private val config: LyricistConfig,
     private val codeGenerator: CodeGenerator,
     private val logger: KSPLogger
 ) : SymbolProcessor {
@@ -26,16 +29,14 @@ internal class LyricistXmlSymbolProcessor(
     private val strings = mutableMapOf<LanguageTag, StringResources>()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        strings += File(config.resourcesPath)
+        strings += File(config.resourcesPathOrThrow)
             .walk()
             .filterXmlStringFiles()
             .groupBy { file ->
                 val languageTag = file.languageTag
 
-                if (languageTag.isBlank()) {
+                languageTag.ifBlank {
                     config.defaultLanguageTag
-                } else {
-                    languageTag
                 }
             }
             .mapValues { (_, files) ->

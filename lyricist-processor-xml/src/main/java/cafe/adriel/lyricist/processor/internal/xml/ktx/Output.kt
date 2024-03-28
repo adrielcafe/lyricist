@@ -1,7 +1,7 @@
-package cafe.adriel.lyricist.processor.xml.internal.ktx
+package cafe.adriel.lyricist.processor.internal.xml.ktx
 
-import cafe.adriel.lyricist.processor.xml.internal.LanguageTag
-import cafe.adriel.lyricist.processor.xml.internal.Quantity
+import cafe.adriel.lyricist.processor.internal.xml.LanguageTag
+import cafe.adriel.lyricist.processor.internal.xml.Quantity
 import java.io.File
 
 internal val INDENTATION = " ".repeat(4)
