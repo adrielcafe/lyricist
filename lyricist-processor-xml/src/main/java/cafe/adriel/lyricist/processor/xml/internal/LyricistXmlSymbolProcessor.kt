@@ -145,6 +145,7 @@ internal class LyricistXmlSymbolProcessor(
                 |public val $stringsName: Map<LanguageTag, $fileName> = mapOf(
                 |$translationMappingOutput
                 |)
+                |
                 """.trimMargin().toByteArray()
             )
             if (config.generateComposeAccessors) {
