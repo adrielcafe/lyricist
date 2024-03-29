@@ -2,6 +2,7 @@
     <string name="simple">Hello "world"</string>
     <string name="params">Parameters: %1$s, %2$d, %s, %d</string>
     <string name="replacement">@string/simple</string>
+    <string name="missing_translation">Missing translation</string>
 
     <string-array name="array">
         <item>Avocado</item>
