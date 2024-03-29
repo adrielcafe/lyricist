@@ -105,18 +105,34 @@ internal class LyricistXmlSymbolProcessor(
             packageName = config.packageName,
             fileName = fileName
         ).use { stream ->
+            if (config.generateComposeAccessors) {
+                stream.write(
+                    """
+                    |package ${config.packageName}
+                    |
+                    |import androidx.compose.runtime.Composable
+                    |import androidx.compose.runtime.ProvidableCompositionLocal
+                    |import androidx.compose.runtime.staticCompositionLocalOf
+                    |import androidx.compose.ui.text.intl.Locale
+                    |import cafe.adriel.lyricist.Lyricist
+                    |import cafe.adriel.lyricist.LanguageTag
+                    |import cafe.adriel.lyricist.rememberStrings
+                    |import cafe.adriel.lyricist.ProvideStrings
+                    |
+                    """.trimMargin().toByteArray()
+                )
+            } else {
+                stream.write(
+                    """
+                    |package ${config.packageName}
+                    |
+                    |import cafe.adriel.lyricist.LanguageTag
+                    |
+                    """.trimMargin().toByteArray()
+                )
+            }
             stream.write(
                 """
-                |package ${config.packageName}
-                |
-                |import androidx.compose.runtime.Composable
-                |import androidx.compose.runtime.ProvidableCompositionLocal
-                |import androidx.compose.runtime.staticCompositionLocalOf
-                |import androidx.compose.ui.text.intl.Locale
-                |import cafe.adriel.lyricist.Lyricist
-                |import cafe.adriel.lyricist.LanguageTag
-                |import cafe.adriel.lyricist.rememberStrings
-                |import cafe.adriel.lyricist.ProvideStrings
                 |
                 |public interface $fileName {
                 |$values
@@ -129,26 +145,32 @@ internal class LyricistXmlSymbolProcessor(
                 |public val $stringsName: Map<LanguageTag, $fileName> = mapOf(
                 |$translationMappingOutput
                 |)
-                |
-                |public val Local$fileName: ProvidableCompositionLocal<$fileName> = 
-                |    staticCompositionLocalOf { $defaultStringsOutput }
-                |
-                |@Composable
-                |public fun remember$fileName(
-                |    defaultLanguageTag: LanguageTag = "${config.defaultLanguageTag}",
-                |    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
-                |): Lyricist<$fileName> =
-                |    rememberStrings($stringsName, defaultLanguageTag, currentLanguageTag)
-                |
-                |@Composable
-                |public fun Provide$fileName(
-                |    lyricist: Lyricist<$fileName>,
-                |    content: @Composable () -> Unit
-                |) {
-                |    ProvideStrings(lyricist, Local$fileName, content)
-                |}
                 """.trimMargin().toByteArray()
             )
+            if (config.generateComposeAccessors) {
+                stream.write(
+                    """
+                    |
+                    |public val Local$fileName: ProvidableCompositionLocal<$fileName> = 
+                    |    staticCompositionLocalOf { $defaultStringsOutput }
+                    |
+                    |@Composable
+                    |public fun remember$fileName(
+                    |    defaultLanguageTag: LanguageTag = "${config.defaultLanguageTag}",
+                    |    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
+                    |): Lyricist<$fileName> =
+                    |    rememberStrings($stringsName, defaultLanguageTag, currentLanguageTag)
+                    |
+                    |@Composable
+                    |public fun Provide$fileName(
+                    |    lyricist: Lyricist<$fileName>,
+                    |    content: @Composable () -> Unit
+                    |) {
+                    |    ProvideStrings(lyricist, Local$fileName, content)
+                    |}
+                    """.trimMargin().toByteArray()
+                )
+            }
         }
     }
 
