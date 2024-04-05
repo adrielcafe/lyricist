@@ -5,4 +5,5 @@ internal data class LyricistXmlConfig(
     val moduleName: String,
     val defaultLanguageTag: String,
     val resourcesPath: String,
+    val generateComposeAccessors: Boolean,
 )
