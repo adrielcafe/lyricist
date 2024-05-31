@@ -45,16 +45,6 @@ internal class LyricistSymbolProcessor(
 
         val visibility = if (config.internalVisibility) "internal" else "public"
 
-        val stringsProperty = if (config.generateStringsProperty) {
-            """
-            |$visibility val strings: $fileName
-            |    @Composable
-            |    get() = Local$fileName.current
-            """.trimMargin()
-        } else {
-            ""
-        }
-
         val defaultLanguageTag = roundDeclaration
             .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
             ?.let { "\"$it\"" }
@@ -71,6 +61,16 @@ internal class LyricistSymbolProcessor(
         val stringsClassOutput = defaultStrings.getClassSimpleName()
 
         val defaultStringsOutput = defaultStrings.simpleName.getShortName()
+
+        val stringsProperty = if (config.generateStringsProperty) {
+            """
+            |$visibility val strings: $stringsClassOutput
+            |    @Composable
+            |    get() = Local$fileName.current
+            """.trimMargin()
+        } else {
+            ""
+        }
 
         val translationMappingOutput = roundDeclaration
             .map {
