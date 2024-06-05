@@ -7,5 +7,6 @@ internal data class Strings(
     val annotated: AnnotatedString,
     val parameter: (locale: String) -> String,
     val plural: (count: Int) -> String,
-    val list: List<String>
+    val list: List<String>,
+    val nonComposeAlert:String
 )

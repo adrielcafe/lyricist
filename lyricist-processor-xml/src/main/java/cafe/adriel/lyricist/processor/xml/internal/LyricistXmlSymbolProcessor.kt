@@ -168,6 +168,14 @@ internal class LyricistXmlSymbolProcessor(
                     """.trimMargin().toByteArray()
                 )
             }
+            stream.write(
+                """
+                |
+                |public fun getLocale$fileName(locale: Locale = Locale.current): $fileName {
+                |    return $stringsName[locale.toLanguageTag()] ?: $defaultStringsOutput
+                |} 
+                """.trimMargin().toByteArray()
+            )
         }
     }
 
