@@ -57,8 +57,17 @@ internal class LyricistXmlSymbolProcessor(
             ?.let { writeStringsClassFile(fileName, stringsName, it, strings.keys) }
             ?: logger.error("Default language tag not found")
 
+        val defaultStrings = strings[config.defaultLanguageTag].orEmpty()
+
         strings.forEach { (languageTag, strings) ->
-            writeStringsPropertyFile(fileName, languageTag, strings)
+            val stringsWithMissingTranslations = if (languageTag != config.defaultLanguageTag) {
+                val notTranslatedStrings = defaultStrings.filterKeys { key -> !strings.containsKey(key) }
+                strings + notTranslatedStrings
+            } else {
+                strings
+            }
+
+            writeStringsPropertyFile(fileName, languageTag, stringsWithMissingTranslations)
         }
     }
 
