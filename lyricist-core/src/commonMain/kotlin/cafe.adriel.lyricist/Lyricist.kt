@@ -8,11 +8,18 @@ public typealias LanguageTag = String
 
 public class Lyricist<T>(
     private val defaultLanguageTag: LanguageTag,
+    private val layoutDirections: Map<LanguageTag, LayoutDirection>,
     private val translations: Map<LanguageTag, T>
 ) {
 
     private val mutableState: MutableStateFlow<LyricistState<T>> =
-        MutableStateFlow(LyricistState(defaultLanguageTag, getStrings(defaultLanguageTag)))
+        MutableStateFlow(
+            LyricistState(
+                defaultLanguageTag,
+                getLayoutDirection(defaultLanguageTag),
+                getStrings(defaultLanguageTag)
+            )
+        )
 
     public val state: StateFlow<LyricistState<T>> =
         mutableState.asStateFlow()
@@ -20,8 +27,16 @@ public class Lyricist<T>(
     public var languageTag: LanguageTag
         get() = mutableState.value.languageTag
         set(languageTag) {
-            mutableState.value = LyricistState(languageTag, getStrings(languageTag))
+            mutableState.value = LyricistState(
+                languageTag,
+                getLayoutDirection(languageTag),
+                getStrings(languageTag)
+            )
         }
+
+    public val layoutDirection: LayoutDirection
+        get() = mutableState.value.layoutDirection
+
 
     public val strings: T
         get() = mutableState.value.strings
@@ -35,6 +50,12 @@ public class Lyricist<T>(
             ?: translations[defaultLanguageTag]
             ?: throw LyricistException("Strings for language tag $languageTag not found")
 
+    private fun getLayoutDirection(languageTag: LanguageTag): LayoutDirection =
+        layoutDirections[languageTag]
+            ?: layoutDirections[languageTag.fallback]
+            ?: layoutDirections[defaultLanguageTag]
+            ?: throw LyricistException("LayoutDirection for language tag $languageTag not found")
+
     private companion object {
         private val FALLBACK_REGEX = Regex("[-_]")
     }
@@ -42,6 +63,7 @@ public class Lyricist<T>(
 
 public data class LyricistState<T> internal constructor(
     val languageTag: LanguageTag,
+    val layoutDirection: LayoutDirection,
     val strings: T,
 )
 
@@ -53,5 +75,10 @@ public class LyricistException internal constructor(
 @Retention(AnnotationRetention.SOURCE)
 public annotation class LyricistStrings(
     val languageTag: LanguageTag,
+    val layoutDirection: LayoutDirection = LayoutDirection.Ltr,
     val default: Boolean = false
 )
+
+public enum class LayoutDirection {
+    Ltr, Rtl
+}
