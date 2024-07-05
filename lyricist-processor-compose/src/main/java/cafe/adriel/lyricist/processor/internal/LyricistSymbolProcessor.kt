@@ -43,6 +43,8 @@ internal class LyricistSymbolProcessor(
 
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
 
+        val layoutDirectionsName = "${config.moduleName.toLowerCamelCase()}LayoutDirections"
+
         val visibility = if (config.internalVisibility) "internal" else "public"
 
         val stringsProperty = if (config.generateStringsProperty) {
@@ -79,6 +81,15 @@ internal class LyricistSymbolProcessor(
                 "$INDENTATION\"$languageTag\" to $property"
             }
 
+        val layoutDirectionMappingOutput = roundDeclaration
+            .map {
+                val languageTag = it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)!!
+                val layoutDirection = it.annotations.getValue<Any>(ANNOTATION_PARAM_LAYOUT_DIRECTION)!!
+                languageTag to layoutDirection
+            }.joinToString(",\n") { (languageTag, layoutDirection) ->
+                "$INDENTATION\"$languageTag\" to $layoutDirection"
+            }
+
         codeGenerator.createNewFile(
             dependencies = Dependencies(
                 aggregating = true,
@@ -97,12 +108,17 @@ internal class LyricistSymbolProcessor(
                 |import androidx.compose.ui.text.intl.Locale
                 |import cafe.adriel.lyricist.Lyricist
                 |import cafe.adriel.lyricist.LanguageTag
+                |import cafe.adriel.lyricist.LayoutDirection
                 |import cafe.adriel.lyricist.rememberStrings
                 |import cafe.adriel.lyricist.ProvideStrings
                 |$packagesOutput
                 |
                 |$visibility val $stringsName: Map<LanguageTag, $stringsClassOutput> = mapOf(
                 |$translationMappingOutput
+                |)
+                |
+                |$visibility val $layoutDirectionsName: Map<LanguageTag, LayoutDirection> = mapOf(
+                |$layoutDirectionMappingOutput
                 |)
                 |
                 |$visibility val Local$fileName: ProvidableCompositionLocal<$stringsClassOutput> = 
@@ -115,7 +131,7 @@ internal class LyricistSymbolProcessor(
                 |    defaultLanguageTag: LanguageTag = $defaultLanguageTag,
                 |    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
                 |): Lyricist<$stringsClassOutput> =
-                |    rememberStrings($stringsName, defaultLanguageTag, currentLanguageTag)
+                |    rememberStrings($stringsName, $layoutDirectionsName, defaultLanguageTag, currentLanguageTag)
                 |
                 |@Composable
                 |$visibility fun Provide$fileName(
@@ -204,6 +220,7 @@ internal class LyricistSymbolProcessor(
         const val ANNOTATION_NAME = "LyricistStrings"
         const val ANNOTATION_PACKAGE = "cafe.adriel.lyricist.$ANNOTATION_NAME"
         const val ANNOTATION_PARAM_LANGUAGE_TAG = "languageTag"
+        const val ANNOTATION_PARAM_LAYOUT_DIRECTION = "layoutDirection"
         const val ANNOTATION_PARAM_DEFAULT = "default"
     }
 }

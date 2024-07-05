@@ -3,10 +3,10 @@ plugin-android = "8.2.2"
 plugin-ktlint = "12.1.0"
 plugin-maven = "0.28.0"
 
-kotlin = "1.9.22"
+kotlin = "1.9.23"
 
 coroutines = "1.8.0"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.23-1.0.20"
 caseFormat = "0.2.0"
 konsumeXml = "1.1"
 

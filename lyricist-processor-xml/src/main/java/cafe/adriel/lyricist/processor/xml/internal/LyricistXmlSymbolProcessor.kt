@@ -1,5 +1,6 @@
 package cafe.adriel.lyricist.processor.xml.internal
 
+import cafe.adriel.lyricist.LayoutDirection
 import cafe.adriel.lyricist.processor.xml.internal.ktx.INDENTATION
 import cafe.adriel.lyricist.processor.xml.internal.ktx.filterXmlStringFiles
 import cafe.adriel.lyricist.processor.xml.internal.ktx.formatted
@@ -15,7 +16,9 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
 import com.google.devtools.ksp.symbol.KSAnnotated
+import java.awt.ComponentOrientation
 import java.io.File
+import java.util.Locale
 
 internal class LyricistXmlSymbolProcessor(
     private val config: LyricistXmlConfig,
@@ -52,10 +55,18 @@ internal class LyricistXmlSymbolProcessor(
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
 
         val stringsName = "${config.moduleName.toLowerCamelCase()}Strings"
+        val layoutDirectionsName = "${config.moduleName.toLowerCamelCase()}LayoutDirections"
 
         strings[config.defaultLanguageTag]
-            ?.let { writeStringsClassFile(fileName, stringsName, it, strings.keys) }
-            ?: logger.error("Default language tag not found")
+            ?.let {
+                writeStringsClassFile(
+                    fileName,
+                    stringsName,
+                    layoutDirectionsName,
+                    it,
+                    strings.keys
+                )
+            } ?: logger.error("Default language tag not found")
 
         val defaultStrings = strings[config.defaultLanguageTag].orEmpty()
 
@@ -74,6 +85,7 @@ internal class LyricistXmlSymbolProcessor(
     private fun writeStringsClassFile(
         fileName: String,
         stringsName: String,
+        layoutDirectionsName: String,
         strings: StringResources,
         languageTags: Set<String>
     ) {
@@ -88,6 +100,7 @@ internal class LyricistXmlSymbolProcessor(
                             "(${params.joinToString()}) -> String"
                         }
                     }
+
                     is StringResource.StringArray -> "List<String>"
                     is StringResource.Plurals -> "(quantity: Int) -> String"
                 }
@@ -100,6 +113,15 @@ internal class LyricistXmlSymbolProcessor(
                 languageTag to "${languageTag.toUpperCamelCase()}$fileName"
             }.joinToString(",\n") { (languageTag, property) ->
                 "${INDENTATION}Locales.${languageTag.toUpperCamelCase()} to $property"
+            }
+
+        val layoutDirectionMappingOutput = languageTags
+            .map { languageTag ->
+                val isLtr = ComponentOrientation.getOrientation(Locale(languageTag)).isLeftToRight
+                val layoutDirection = if (isLtr) LayoutDirection.Ltr else LayoutDirection.Rtl
+                languageTag to layoutDirection
+            }.joinToString(",\n") { (languageTag, layoutDirection) ->
+                "$INDENTATION\"$languageTag\" to LayoutDirection.$layoutDirection"
             }
 
         val localesOutput = languageTags
@@ -130,6 +152,7 @@ internal class LyricistXmlSymbolProcessor(
                     |import androidx.compose.ui.text.intl.Locale
                     |import cafe.adriel.lyricist.Lyricist
                     |import cafe.adriel.lyricist.LanguageTag
+                    |import cafe.adriel.lyricist.LayoutDirection
                     |import cafe.adriel.lyricist.rememberStrings
                     |import cafe.adriel.lyricist.ProvideStrings
                     |
@@ -155,6 +178,10 @@ internal class LyricistXmlSymbolProcessor(
                     |
                     |public val $stringsName: Map<LanguageTag, $fileName> = mapOf(
                     |$translationMappingOutput
+                    |)   
+                    | 
+                    |public val $layoutDirectionsName: Map<LanguageTag, LayoutDirection> = mapOf(
+                    |$layoutDirectionMappingOutput
                     |)
                     |
                     |public val Local$fileName: ProvidableCompositionLocal<$fileName> = 
@@ -165,7 +192,7 @@ internal class LyricistXmlSymbolProcessor(
                     |    defaultLanguageTag: LanguageTag = "${config.defaultLanguageTag}",
                     |    currentLanguageTag: LanguageTag = Locale.current.toLanguageTag(),
                     |): Lyricist<$fileName> =
-                    |    rememberStrings($stringsName, defaultLanguageTag, currentLanguageTag)
+                    |    rememberStrings($stringsName, $layoutDirectionsName, defaultLanguageTag, currentLanguageTag)
                     |
                     |@Composable
                     |public fun Provide$fileName(

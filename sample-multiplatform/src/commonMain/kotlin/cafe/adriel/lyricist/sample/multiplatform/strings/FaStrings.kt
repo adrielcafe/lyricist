@@ -9,28 +9,28 @@ import cafe.adriel.lyricist.LayoutDirection
 import cafe.adriel.lyricist.LyricistStrings
 import cafe.adriel.lyricist.sample.multiplatform.Locales
 
-@LyricistStrings(languageTag = Locales.EN, layoutDirection = LayoutDirection.Ltr, default = true)
-internal val EnStrings = Strings(
-    simple = "Hello Compose!",
+@LyricistStrings(languageTag = Locales.FA, layoutDirection = LayoutDirection.Rtl)
+internal val FaStrings = Strings(
+    simple = "سلام کامپوز!",
 
     annotated = buildAnnotatedString {
-        withStyle(SpanStyle(color = Color.Red)) { append("Hello ") }
-        withStyle(SpanStyle(fontWeight = FontWeight.Light)) { append("Compose!") }
+        withStyle(SpanStyle(color = Color.Red)) { append("سلام ") }
+        withStyle(SpanStyle(fontWeight = FontWeight.Light)) { append("کامپوز!") }
     },
 
     parameter = { locale ->
-        "Current locale: $locale"
+        " زبان فعلی: $locale"
     },
 
     plural = { count ->
         val value = when (count) {
-            0 -> "no"
-            1, 2 -> "a few"
-            in 3..10 -> "a bunch of"
-            else -> "a lot of"
+            0 -> "هیچی"
+            1, 2 -> "یک مقدار"
+            in 3..10 -> "تعدادی"
+            else -> "خیلی"
         }
-        "I have $value apples"
+        " من $value سیب دارم. "
     },
 
-    list = listOf("Avocado", "Pineapple", "Plum")
+    list = listOf("آووکادو", "آناناس", "آلو")
 )

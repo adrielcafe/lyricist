@@ -1,6 +1,8 @@
 apply from: "../kotlin-module.gradle"
 
 dependencies {
+    implementation(project(":lyricist-core"))
+
     implementation libs.ksp
     implementation libs.caseFormat
     implementation libs.konsumeXml

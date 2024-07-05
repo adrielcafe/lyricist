@@ -43,6 +43,12 @@ internal fun SampleApplication() {
                     Locales.PT,
                     Modifier.weight(1f)
                 )
+                Spacer(Modifier.weight(.1f))
+                SwitchLocaleButton(
+                    lyricist,
+                    Locales.FA,
+                    Modifier.weight(1f)
+                )
             }
         }
     }

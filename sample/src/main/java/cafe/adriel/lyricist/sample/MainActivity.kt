@@ -95,6 +95,11 @@ class MainActivity : ComponentActivity() {
                         Locales.PT,
                         Modifier.weight(1f)
                     )
+                    Spacer(Modifier.weight(.1f))
+                    SwitchLocaleButton(
+                        Locales.FA,
+                        Modifier.weight(1f)
+                    )
                 }
             }
         }

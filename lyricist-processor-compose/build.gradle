@@ -3,6 +3,7 @@ apply from: "../kotlin-module.gradle"
 dependencies {
     implementation libs.ksp
     implementation libs.caseFormat
+    implementation project(':lyricist-core')
 }
 
 apply plugin: "com.vanniktech.maven.publish"
