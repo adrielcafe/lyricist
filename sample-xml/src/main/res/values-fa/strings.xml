@@ -1,0 +1,20 @@
+<resources>
+    <string name="simple">سلام دنیا"</string>
+    <string name="params">پارامتر‌ها: %1$s, %2$d, %s, %d</string>
+    <string name="replacement">@string/simple</string>
+
+    <string-array name="array">
+        <item>آووکادو</item>
+        <item>آناناس</item>
+        <item>آلو</item>
+    </string-array>
+
+    <plurals name="plurals">
+        <item quantity="zero">%d صفر</item>
+        <item quantity="one">%d یک</item>
+        <item quantity="two">%d دو</item>
+        <item quantity="few">%d مقداری</item>
+        <item quantity="many">%d زیادی</item>
+        <item quantity="other">%d غیره</item>
+    </plurals>
+</resources>
