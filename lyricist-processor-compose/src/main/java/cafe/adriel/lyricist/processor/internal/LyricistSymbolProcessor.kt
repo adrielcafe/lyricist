@@ -1,6 +1,5 @@
 package cafe.adriel.lyricist.processor.internal
 
-import cafe.adriel.lyricist.LayoutDirection
 import com.fleshgrinder.extensions.kotlin.toLowerCamelCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.devtools.ksp.processing.CodeGenerator
@@ -84,13 +83,11 @@ internal class LyricistSymbolProcessor(
 
         val layoutDirectionMappingOutput = roundDeclaration
             .map {
-                val languageTag = it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)
-                val layoutDirection: LayoutDirection = it.annotations.getValue<Any>(
-                    ANNOTATION_PARAM_LAYOUT_DIRECTION
-                ).getLayoutDirectionOrDefault()
+                val languageTag = it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)!!
+                val layoutDirection = it.annotations.getValue<Any>(ANNOTATION_PARAM_LAYOUT_DIRECTION)!!
                 languageTag to layoutDirection
             }.joinToString(",\n") { (languageTag, layoutDirection) ->
-                "$INDENTATION\"$languageTag\" to LayoutDirection.$layoutDirection"
+                "$INDENTATION\"$languageTag\" to $layoutDirection"
             }
 
         codeGenerator.createNewFile(
@@ -216,10 +213,6 @@ internal class LyricistSymbolProcessor(
 
     private fun List<KSValueArgument>.withName(name: String): KSValueArgument? =
         firstOrNull { it.name?.getShortName() == name }
-
-    private fun Any?.getLayoutDirectionOrDefault(default: () -> LayoutDirection = { LayoutDirection.Ltr }): LayoutDirection {
-        return if (this is LayoutDirection) this else default()
-    }
 
     private companion object {
         val INDENTATION = " ".repeat(4)
