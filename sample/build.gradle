@@ -16,7 +16,9 @@ dependencies {
     implementation(project(":sample-xml"))
 
     implementation(project(":lyricist-compose"))
-    ksp(project(":lyricist-processor-compose"))
+
+    // KSP 2.0: For Android-only projects, use ksp() directly
+    ksp project(":lyricist-processor-compose")
 
     implementation libs.appCompat
     implementation libs.compose.activity
