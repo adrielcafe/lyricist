@@ -1,20 +1,18 @@
 [versions]
-plugin-android = "8.2.2"
+plugin-android = "8.8.2"
 plugin-ktlint = "12.1.0"
 plugin-maven = "0.28.0"
 
-kotlin = "1.9.22"
+kotlin = "2.2.21"
 
 coroutines = "1.8.0"
-ksp = "1.9.22-1.0.17"
+ksp = "2.2.21-2.0.4"
 caseFormat = "0.2.0"
 konsumeXml = "1.1"
 
 appCompat = "1.6.1"
-compose = "1.6.4"
-composeCompiler = "1.5.11"
+compose = "1.7.3"
 composeActivity = "1.8.2"
-composeMultiplatform = "1.6.1"
 
 test-junit = "1.1.5"
 
@@ -23,8 +21,9 @@ plugin-android = { module = "com.android.tools.build:gradle", version.ref = "plu
 plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "plugin-ktlint" }
 plugin-maven = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "plugin-maven" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 plugin-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-plugin-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "composeMultiplatform" }
+plugin-compose-multiplatform = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -45,6 +44,7 @@ plugins = [
     "plugin-ktlint",
     "plugin-maven",
     "plugin-kotlin",
+    "plugin-kotlin-compose",
     "plugin-ksp",
     "plugin-compose-multiplatform",
 ]

@@ -1,12 +1,18 @@
 import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.kotlin.dsl.*
 import com.android.build.gradle.LibraryExtension
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+
+private val targetJavaVersion = JavaVersion.VERSION_1_8
+private val targetJvmVersion = JvmTarget.JVM_1_8
 
 private fun BaseExtension.android() {
     compileSdkVersion(34)
@@ -41,57 +47,15 @@ fun Project.kotlinMultiplatform(
             wasmJs {
                 browser()
             }
+
+            // Use default hierarchy template for native targets
+            applyDefaultHierarchyTemplate()
+
             macosX64()
             macosArm64()
-            ios()
+            iosX64()
+            iosArm64()
             iosSimulatorArm64()
-
-            sourceSets {
-                /* Source sets structure
-                common
-                  ├─ jvm
-                      ├─ android
-                      ├─ desktop
-                 */
-                val commonMain by getting
-                val commonTest by getting
-                val jvmMain by creating {
-                    dependsOn(commonMain)
-                }
-                val jvmTest by creating {
-                    dependsOn(commonTest)
-                }
-
-                val desktopMain by getting {
-                    dependsOn(jvmMain)
-                }
-                val androidMain by getting {
-                    dependsOn(jvmMain)
-                }
-                val desktopTest by getting {
-                    dependsOn(jvmTest)
-                }
-
-                val nativeMain by creating {
-                    dependsOn(commonMain)
-                }
-
-                val macosMain by creating {
-                    dependsOn(nativeMain)
-                }
-                val macosX64Main by getting {
-                    dependsOn(macosMain)
-                }
-                val macosArm64Main by getting {
-                    dependsOn(macosMain)
-                }
-                val iosMain by getting {
-                    dependsOn(nativeMain)
-                }
-                val iosSimulatorArm64Main by getting {
-                    dependsOn(iosMain)
-                }
-            }
         }
 
         findAndroidExtension().apply {
@@ -99,18 +63,65 @@ fun Project.kotlinMultiplatform(
             sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
         }
 
-        tasks.withType<KotlinCompile> {
-            kotlinOptions.configureKotlinJvmOptions(withKotlinExplicitMode)
-        }
+        // Configure JVM compilation using modern API
+        configureJvmCompilation(withKotlinExplicitMode)
     }
 }
 
-private fun KotlinJvmOptions.configureKotlinJvmOptions(
-    enableExplicitMode: Boolean
-) {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
+private fun Project.configureJvmCompilation(withKotlinExplicitMode: Boolean) {
+    // Java Plugin Configuration
+    plugins.withType<JavaPlugin> {
+        extensions.configure<JavaPluginExtension> {
+            sourceCompatibility = targetJavaVersion
+            targetCompatibility = targetJavaVersion
+        }
+    }
 
-    if (enableExplicitMode) freeCompilerArgs += "-Xexplicit-api=strict"
+    // Android Configuration
+    plugins.withId("com.android.library") {
+        findAndroidExtension().apply {
+            compileOptions {
+                sourceCompatibility = targetJavaVersion
+                targetCompatibility = targetJavaVersion
+            }
+        }
+    }
+
+    plugins.withId("com.android.application") {
+        findAndroidExtension().apply {
+            compileOptions {
+                sourceCompatibility = targetJavaVersion
+                targetCompatibility = targetJavaVersion
+            }
+        }
+    }
+
+    // Kotlin Multiplatform Configuration
+    extensions.findByType<KotlinMultiplatformExtension>()?.apply {
+        targets.configureEach {
+            compilations.configureEach {
+                compileTaskProvider.configure {
+                    compilerOptions {
+                        if (this !is KotlinJvmCompilerOptions) return@compilerOptions
+                        jvmTarget.set(targetJvmVersion)
+                        if (withKotlinExplicitMode) {
+                            freeCompilerArgs.add("-Xexplicit-api=strict")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Fallback para tasks Android/JVM Kotlin
+    tasks.withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(targetJvmVersion)
+            if (withKotlinExplicitMode) {
+                freeCompilerArgs.add("-Xexplicit-api=strict")
+            }
+        }
+    }
 }
 
 private fun Project.findAndroidExtension(): BaseExtension = extensions.findByType<LibraryExtension>()
