@@ -33,13 +33,16 @@ internal class LyricistSymbolProcessor(
 
         lyricistSymbols.forEach { it.accept(visitor, Unit) }
 
-        // Improved duplicate detection for KSP 2.0 using qualified names + file names
+        // KSP 2.0 duplicate prevention: Filter out declarations already processed in previous rounds
+        // We use qualified name + file name as unique identifier to handle cases where the same
+        // class name might exist in different files (e.g., test vs main source sets)
         val newDeclarations = declarations.filterNot { dec ->
             val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
             processedDeclarations.contains(key)
         }
 
-        // Add to processed set using improved key
+        // Mark new declarations as processed to prevent duplicate code generation in future rounds
+        // This is essential for KSP 2.0's multi-round processing model
         newDeclarations.forEach { dec ->
             val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
             processedDeclarations.add(key)
