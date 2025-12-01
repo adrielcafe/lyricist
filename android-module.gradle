@@ -15,6 +15,16 @@ android {
         release {
         }
     }
+
+    // KSP 2.0 source set configuration
+    sourceSets {
+        debug {
+            java.srcDirs += 'build/generated/ksp/debug/kotlin'
+        }
+        release {
+            java.srcDirs += 'build/generated/ksp/release/kotlin'
+        }
+    }
     buildFeatures {
         compose true
     }
