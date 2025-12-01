@@ -109,8 +109,6 @@ internal class LyricistXmlSymbolProcessor(
 
         val defaultStringsOutput = "${config.defaultLanguageTag.toUpperCamelCase()}$fileName"
 
-        // XML processor aggregates all XML files from filesystem, not Kotlin sources
-        // This is optimal for this use case since we process external XML resources
         codeGenerator.createNewFile(
             dependencies = Dependencies(aggregating = true),
             packageName = config.packageName,
@@ -233,7 +231,6 @@ internal class LyricistXmlSymbolProcessor(
             }
             .joinToString("\n\n") { "$INDENTATION$it" }
 
-        // Property files also aggregate from XML resources, not Kotlin sources
         codeGenerator.createNewFile(
             dependencies = Dependencies(aggregating = true),
             packageName = config.packageName,

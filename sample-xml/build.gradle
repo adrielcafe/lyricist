@@ -14,9 +14,7 @@ ksp {
 
 dependencies {
     implementation(project(":lyricist-compose"))
-
-    // KSP 2.0: For Android-only projects, use ksp() directly
-    ksp project(":lyricist-processor-xml")
+    ksp(project(":lyricist-processor-xml"))
 
     implementation libs.compose.runtime
     implementation libs.compose.ui.text

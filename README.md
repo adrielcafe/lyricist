@@ -332,16 +332,14 @@ lyricist-processorXml = { module = "cafe.adriel.lyricist:lyricist-processor-xml"
 
 #### Multiplatform setup
 
-For Kotlin Multiplatform projects, generate code at `commonMain` to share across all targets:
-
+Doing code generation only at `commonMain`. Currently workaround, for more information see [KSP Issue 567](https://github.com/google/ksp/issues/567)
 ```kotlin
 dependencies {
     add("kspCommonMainMetadata", "cafe.adriel.lyricist:lyricist-processor:${latest-version}")
 }
 
-// Fix for KSP 2.0 task dependencies (prevents race conditions)
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
-    if (name != "kspCommonMainKotlinMetadata") {
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
+    if(name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
     }
 }
@@ -349,19 +347,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().con
 kotlin.sourceSets.commonMain {
     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
 }
-```
-
-> **Note**: With KSP 2.0+, the task dependency configuration has been improved for better incremental compilation support.
-
-#### KSP 2.0 Performance Optimizations (Optional)
-
-For optimal build performance with KSP 2.0, add these configurations to your `gradle.properties`:
-
-```properties
-# Enable native KSP 2.0 mode for better performance
-ksp.useKsp2=true
-ksp.incremental=true
-ksp.incremental.log=false
 ```
 
 Current version: ![Maven metadata URL](https://img.shields.io/maven-metadata/v?color=blue&metadataUrl=https://s01.oss.sonatype.org/service/local/repo_groups/public/content/cafe/adriel/lyricist/lyricist/maven-metadata.xml)
