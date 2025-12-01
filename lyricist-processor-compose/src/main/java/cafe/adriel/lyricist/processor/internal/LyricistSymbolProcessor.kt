@@ -20,10 +20,10 @@ internal class LyricistSymbolProcessor(
 ) : SymbolProcessor {
 
     private val declarations = mutableListOf<KSPropertyDeclaration>()
-    private val previousRoundDeclarations = mutableSetOf<KSPropertyDeclaration>()
+    private val processedDeclarations = mutableSetOf<String>()
 
     private val visitor = LyricistVisitor(declarations)
-    private var generatedInPreviousRounds: Boolean = false
+    private var hasGeneratedCode: Boolean = false
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         declarations.clear()
@@ -33,11 +33,19 @@ internal class LyricistSymbolProcessor(
 
         lyricistSymbols.forEach { it.accept(visitor, Unit) }
 
-        val roundDeclaration =
-            declarations.filterNot { dec -> previousRoundDeclarations.any { it.qualifiedName == dec.qualifiedName } }
-        previousRoundDeclarations += declarations
+        // Improved duplicate detection for KSP 2.0 using qualified names + file names
+        val newDeclarations = declarations.filterNot { dec ->
+            val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
+            processedDeclarations.contains(key)
+        }
 
-        if (validate(roundDeclaration).not()) return emptyList()
+        // Add to processed set using improved key
+        newDeclarations.forEach { dec ->
+            val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
+            processedDeclarations.add(key)
+        }
+
+        if (validate(newDeclarations).not()) return emptyList()
 
         val fileName = "${config.moduleName.toUpperCamelCase()}Strings"
 
@@ -55,15 +63,15 @@ internal class LyricistSymbolProcessor(
             ""
         }
 
-        val defaultLanguageTag = roundDeclaration
+        val defaultLanguageTag = newDeclarations
             .firstNotNullOfOrNull { it.annotations.getDefaultLanguageTag() }
             ?.let { "\"$it\"" }
             ?: "Locale.current.toLanguageTag()"
 
-        val defaultStrings = roundDeclaration
+        val defaultStrings = newDeclarations
             .first { it.annotations.getValue<Boolean>(ANNOTATION_PARAM_DEFAULT) == true }
 
-        val packagesOutput = roundDeclaration
+        val packagesOutput = newDeclarations
             .mapNotNull { it.qualifiedName?.asString() }
             .plus(defaultStrings.getClassQualifiedName())
             .joinToString(separator = "\n") { packageName -> "import $packageName" }
@@ -72,7 +80,7 @@ internal class LyricistSymbolProcessor(
 
         val defaultStringsOutput = defaultStrings.simpleName.getShortName()
 
-        val translationMappingOutput = roundDeclaration
+        val translationMappingOutput = newDeclarations
             .map {
                 it.annotations.getValue<String>(ANNOTATION_PARAM_LANGUAGE_TAG)!! to it.simpleName.getShortName()
             }.joinToString(",\n") { (languageTag, property) ->
@@ -82,7 +90,7 @@ internal class LyricistSymbolProcessor(
         codeGenerator.createNewFile(
             dependencies = Dependencies(
                 aggregating = true,
-                sources = roundDeclaration.map { it.containingFile!! }.toTypedArray()
+                sources = newDeclarations.map { it.containingFile!! }.toTypedArray()
             ),
             packageName = config.packageName,
             fileName = fileName
@@ -132,7 +140,7 @@ internal class LyricistSymbolProcessor(
             )
         }
 
-        generatedInPreviousRounds = true
+        hasGeneratedCode = true
 
         return emptyList()
     }
@@ -146,8 +154,16 @@ internal class LyricistSymbolProcessor(
             .count()
 
         return when {
-            generatedInPreviousRounds -> {
-                // ignore code generation if is a new round and did already generated previously
+            properties.isEmpty() -> {
+                // No new declarations to process in this round
+                false
+            }
+
+            hasGeneratedCode && properties.all { dec ->
+                val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
+                processedDeclarations.contains(key)
+            } -> {
+                // All declarations in this round have already been processed
                 false
             }
 

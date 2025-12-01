@@ -11,14 +11,8 @@ android {
     }
     buildTypes {
         debug {
-            sourceSets {
-                main.java.srcDirs += 'build/generated/ksp/debug/kotlin/'
-            }
         }
         release {
-            sourceSets {
-                main.java.srcDirs += 'build/generated/ksp/release/kotlin/'
-            }
         }
     }
     buildFeatures {

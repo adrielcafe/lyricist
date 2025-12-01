@@ -11,6 +11,15 @@ ksp {
     arg("lyricist.moduleName", "multi-module")
 }
 
+// Fix for KSP 2.0 task dependencies and race conditions in Android projects
+// Based on: https://github.com/google/ksp/issues/1940
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    if (name.contains("ksp")) return
+    dependsOn tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).matching {
+        it.name.startsWith("ksp") && it.name.endsWith("Kotlin")
+    }
+}
+
 dependencies {
     implementation(project(":lyricist-compose"))
     ksp(project(":lyricist-processor-compose"))
