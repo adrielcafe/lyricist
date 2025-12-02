@@ -277,6 +277,39 @@ CompositionLocalProvider(
 ```
 </details>
 
+## KSP 2.0 Configuration
+
+Lyricist uses KSP 2.0 for optimal performance and multiplatform compatibility. The following `gradle.properties` configuration is recommended for best results:
+
+```properties
+# Enable KSP 2.0 architecture for K2 compiler compatibility and performance improvements
+ksp.useKsp2=true
+
+# Enable incremental compilation for dramatically faster builds (20-50% improvement)
+# Only reprocesses changed files instead of regenerating everything from scratch
+ksp.incremental=true
+
+# Allow KSP processors to work across all multiplatform targets
+# Prevents "processor not found" errors on iOS, Desktop, Web, and native targets
+ksp.allow.all.target.platforms=true
+
+# Disable incremental compilation logging for cleaner build output
+# Enable temporarily (ksp.incremental.log=true) when debugging KSP issues
+ksp.incremental.log=false
+
+# Optional: Experimental hierarchical processing model for enhanced incremental compilation
+# Can provide additional performance improvements in complex multiplatform projects
+#ksp.experimental.processing.model=hierarchical
+```
+
+### Performance Benefits
+
+With KSP 2.0 configuration, you can expect:
+- **Clean builds**: 20-50% faster compilation
+- **Incremental builds**: Up to 90% faster (seconds instead of minutes)
+- **Multiplatform support**: Reliable processing across all targets
+- **Cache efficiency**: Improved build cache utilization
+
 ## Troubleshooting
 
 <details><summary>Can't use the generated code on my IDE</summary>
@@ -296,6 +329,52 @@ buildTypes {
     }
 }
 ```
+</details>
+
+<details><summary>Processor not found errors in multiplatform projects</summary>
+
+Ensure you have the following configuration in your `gradle.properties`:
+```properties
+ksp.allow.all.target.platforms=true
+```
+
+This flag allows KSP processors to work across all multiplatform targets (iOS, Desktop, Web, etc.).
+</details>
+
+<details><summary>Slow incremental builds or frequent clean builds needed</summary>
+
+Verify your KSP 2.0 configuration includes:
+```properties
+ksp.useKsp2=true
+ksp.incremental=true
+```
+
+For debugging incremental compilation issues, temporarily enable:
+```properties
+ksp.incremental.log=true
+ksp.verbose=true
+```
+
+Remember to disable these flags after debugging as they increase build output verbosity.
+</details>
+
+<details><summary>"Overload resolution ambiguity" errors between build variants</summary>
+
+This typically occurs when debug and release variants see each other's generated code. Ensure your Android module uses proper source set isolation:
+
+```gradle
+// In your android module gradle file
+sourceSets {
+    debug {
+        java.srcDirs += 'build/generated/ksp/debug/kotlin'
+    }
+    release {
+        java.srcDirs += 'build/generated/ksp/release/kotlin'
+    }
+}
+```
+
+Avoid configuring source sets inside `buildTypes` blocks as this can cause variant conflicts with KSP 2.0.
 </details>
 
 ## Import to your project

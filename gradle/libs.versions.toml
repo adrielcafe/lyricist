@@ -5,7 +5,7 @@ plugin-maven = "0.28.0"
 
 kotlin = "2.2.21"
 
-coroutines = "1.8.0"
+coroutines = "1.10.2"
 ksp = "2.2.21-2.0.4"
 caseFormat = "0.2.0"
 konsumeXml = "1.1"

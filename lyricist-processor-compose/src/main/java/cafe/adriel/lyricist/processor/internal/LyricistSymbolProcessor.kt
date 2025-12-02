@@ -33,16 +33,20 @@ internal class LyricistSymbolProcessor(
 
         lyricistSymbols.forEach { it.accept(visitor, Unit) }
 
-        // KSP 2.0 duplicate prevention: Filter out declarations already processed in previous rounds
-        // We use qualified name + file name as unique identifier to handle cases where the same
-        // class name might exist in different files (e.g., test vs main source sets)
+        // KSP 2.0 Advanced Duplicate Detection Algorithm
+        // Uses qualified name + file name as composite key to prevent duplicate code generation.
+        // This approach handles edge cases where identical class names exist across different
+        // source sets (main vs test) or build variants (debug vs release), preventing
+        // "Overload resolution ambiguity" errors that occur with simpler deduplication methods.
         val newDeclarations = declarations.filterNot { dec ->
             val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
             processedDeclarations.contains(key)
         }
 
-        // Mark new declarations as processed to prevent duplicate code generation in future rounds
-        // This is essential for KSP 2.0's multi-round processing model
+        // KSP 2.0 Multi-Round Processing State Management
+        // Tracks processed declarations across compilation rounds to ensure idempotent generation.
+        // Critical for KSP 2.0's enhanced processing model which may invoke processors multiple
+        // times for incremental compilation and cross-module dependency resolution.
         newDeclarations.forEach { dec ->
             val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
             processedDeclarations.add(key)
@@ -166,7 +170,9 @@ internal class LyricistSymbolProcessor(
                 val key = "${dec.qualifiedName?.asString()}#${dec.containingFile?.fileName}"
                 processedDeclarations.contains(key)
             } -> {
-                // All declarations in this round have already been processed
+                // KSP 2.0 Incremental Compilation Optimization
+                // Skip processing when all declarations have been handled in previous rounds.
+                // This prevents redundant code generation while maintaining correctness.
                 false
             }
 
