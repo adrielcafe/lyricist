@@ -289,26 +289,11 @@ ksp.useKsp2=true
 # Only reprocesses changed files instead of regenerating everything from scratch
 ksp.incremental=true
 
-# Allow KSP processors to work across all multiplatform targets
-# Prevents "processor not found" errors on iOS, Desktop, Web, and native targets
-ksp.allow.all.target.platforms=true
-
 # Disable incremental compilation logging for cleaner build output
 # Enable temporarily (ksp.incremental.log=true) when debugging KSP issues
 ksp.incremental.log=false
-
-# Optional: Experimental hierarchical processing model for enhanced incremental compilation
-# Can provide additional performance improvements in complex multiplatform projects
-#ksp.experimental.processing.model=hierarchical
 ```
 
-### Performance Benefits
-
-With KSP 2.0 configuration, you can expect:
-- **Clean builds**: 20-50% faster compilation
-- **Incremental builds**: Up to 90% faster (seconds instead of minutes)
-- **Multiplatform support**: Reliable processing across all targets
-- **Cache efficiency**: Improved build cache utilization
 
 ## Troubleshooting
 
@@ -329,16 +314,6 @@ buildTypes {
     }
 }
 ```
-</details>
-
-<details><summary>Processor not found errors in multiplatform projects</summary>
-
-Ensure you have the following configuration in your `gradle.properties`:
-```properties
-ksp.allow.all.target.platforms=true
-```
-
-This flag allows KSP processors to work across all multiplatform targets (iOS, Desktop, Web, etc.).
 </details>
 
 <details><summary>Slow incremental builds or frequent clean builds needed</summary>
