@@ -1,18 +1,13 @@
 apply plugin: 'kotlin'
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-        freeCompilerArgs += '-Xexplicit-api=strict'
-    }
-}
-
 kotlin {
-    jvmToolchain(8)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+        freeCompilerArgs.add('-Xexplicit-api=strict')
+    }
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
-    }
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

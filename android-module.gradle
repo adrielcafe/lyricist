@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 
 android {
     compileSdk 34
@@ -10,24 +11,28 @@ android {
     }
     buildTypes {
         debug {
-            sourceSets {
-                main.java.srcDirs += 'build/generated/ksp/debug/kotlin/'
-            }
         }
         release {
-            sourceSets {
-                main.java.srcDirs += 'build/generated/ksp/release/kotlin/'
-            }
+        }
+    }
+
+    // KSP 2.0 source set configuration
+    sourceSets {
+        debug {
+            java.srcDirs += 'build/generated/ksp/debug/kotlin'
+        }
+        release {
+            java.srcDirs += 'build/generated/ksp/release/kotlin'
         }
     }
     buildFeatures {
         compose true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.composeCompiler.get()
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }

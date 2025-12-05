@@ -10,6 +10,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.application")
     id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
 }
 
@@ -88,9 +89,9 @@ dependencies {
     add("kspCommonMainMetadata", project(":lyricist-processor-compose"))
 }
 
-// workaround for KSP only in Common Main.
-// https://github.com/google/ksp/issues/567
-tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
+// Fix for KSP 2.0 task dependencies and race conditions
+// Based on: https://github.com/google/ksp/issues/1940
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
     if (name != "kspCommonMainKotlinMetadata") {
         dependsOn("kspCommonMainKotlinMetadata")
     }

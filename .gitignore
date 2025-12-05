@@ -6,3 +6,6 @@
 .externalNativeBuild
 .gradle
 *.iml
+
+# K2 compiler cache directory
+.kotlin
