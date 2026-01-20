@@ -152,7 +152,3 @@ afterEvaluate {
         }
     }
 }
-
-compose.experimental {
-    web.application {}
-}
