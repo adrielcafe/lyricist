@@ -11,7 +11,7 @@ caseFormat = "0.2.0"
 konsumeXml = "1.1"
 
 appCompat = "1.6.1"
-compose = "1.7.3"
+compose = "1.10.0"
 composeActivity = "1.8.2"
 
 test-junit = "1.1.5"
