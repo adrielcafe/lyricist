@@ -17,6 +17,9 @@ targets:
       path: plists/Ios/Info.plist
       properties:
         UILaunchStoryboardName: LyricistSample
+        # Required by Compose UI, otherwise its plist sanity check crashes the
+        # app on launch on high-refresh-rate iPhones.
+        CADisableMinimumFrameDurationOnPhone: true
     settings:
       LIBRARY_SEARCH_PATHS: "$(inherited)"
       ENABLE_BITCODE: "YES"

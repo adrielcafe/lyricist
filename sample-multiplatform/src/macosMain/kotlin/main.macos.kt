@@ -5,7 +5,7 @@ import platform.AppKit.NSApplication
 
 fun main() {
     NSApplication.sharedApplication()
-    Window("VoyagerMultiplatform") {
+    Window("Lyricist Sample") {
         SampleApplication()
     }
     NSApp?.run()

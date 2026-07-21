@@ -5,7 +5,10 @@ import androidx.compose.ui.window.application
 
 public fun main() {
     application {
-        Window(onCloseRequest = ::exitApplication) {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = "Lyricist Sample"
+        ) {
             SampleApplication()
         }
     }

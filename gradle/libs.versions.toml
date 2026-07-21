@@ -1,5 +1,5 @@
 [versions]
-plugin-android = "8.8.2"
+plugin-android = "8.9.3"
 plugin-ktlint = "12.1.0"
 plugin-maven = "0.28.0"
 
@@ -11,8 +11,8 @@ caseFormat = "0.2.0"
 konsumeXml = "1.1"
 
 appCompat = "1.6.1"
-compose = "1.7.3"
-composeActivity = "1.8.2"
+compose = "1.10.3"
+composeActivity = "1.13.0"
 
 test-junit = "1.1.5"
 

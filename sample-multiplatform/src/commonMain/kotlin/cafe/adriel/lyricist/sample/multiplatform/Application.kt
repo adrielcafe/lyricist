@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -22,7 +24,13 @@ import cafe.adriel.lyricist.strings
 internal fun SampleApplication() {
     val lyricist = rememberStrings()
     ProvideStrings(lyricist) {
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                // Keep content clear of the status/navigation bars and the
+                // display cutout (Android is edge-to-edge from targetSdk 35+).
+                .safeDrawingPadding()
+        ) {
             SampleStrings(lyricist)
 
             Spacer(Modifier.weight(1f))

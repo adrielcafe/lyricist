@@ -11,14 +11,14 @@ import org.gradle.kotlin.dsl.*
 import com.android.build.gradle.LibraryExtension
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
-private val targetJavaVersion = JavaVersion.VERSION_1_8
-private val targetJvmVersion = JvmTarget.JVM_1_8
+private val targetJavaVersion = JavaVersion.VERSION_11
+private val targetJvmVersion = JvmTarget.JVM_11
 
 private fun BaseExtension.android() {
-    compileSdkVersion(34)
+    compileSdkVersion(36)
     defaultConfig {
-        minSdk = 21
-        targetSdk = 34
+        minSdk = 23
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
