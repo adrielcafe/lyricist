@@ -4,6 +4,7 @@ dependencies {
     implementation libs.ksp
     implementation libs.caseFormat
     implementation libs.konsumeXml
+    testImplementation "junit:junit:4.13.2"
 }
 
 apply plugin: "com.vanniktech.maven.publish"

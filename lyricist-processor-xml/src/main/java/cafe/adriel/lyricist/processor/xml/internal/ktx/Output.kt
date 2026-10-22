@@ -8,7 +8,6 @@ internal val INDENTATION = " ".repeat(4)
 
 private val REGEX_QUOTES = """(?<!\\)"""".toRegex()
 private val REGEX_XML_PARAM = """%\d+\$""".toRegex()
-private val REGEX_STRING_PARAM = """%[s|d]""".toRegex()
 private val REGEX_VALUES_FILE = """values-?""".toRegex()
 
 private const val LANGUAGE_TAG_SEPARATOR_OLD = "-r"
@@ -24,10 +23,37 @@ internal val String.normalized: String
         .replace(REGEX_XML_PARAM, """%""")
 
 internal val String.params: List<String>
-    get() = REGEX_STRING_PARAM.findAll(normalized, 0)
-        .map { it.value }
-        .map { param -> if (param == "%d") "Int" else "String" }
-        .toList()
+    get() {
+        val value = normalized
+        val params = mutableListOf<String>()
+        var index = 0
+
+        while (index < value.length) {
+            if (value[index] != '%') {
+                index++
+                continue
+            }
+
+            if (value.getOrNull(index + 1) == '%') {
+                index += 2
+                continue
+            }
+
+            when (value.getOrNull(index + 1)) {
+                'd' -> {
+                    params += "Int"
+                    index += 2
+                }
+                's' -> {
+                    params += "String"
+                    index += 2
+                }
+                else -> index++
+            }
+        }
+
+        return params
+    }
 
 internal val List<String>.formatted: String
     get() = joinToString(",\n") { "${INDENTATION.repeat(2)}\"${it.normalized}\"" }
